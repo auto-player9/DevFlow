@@ -1,12 +1,20 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
-import standard from "eslint-config-standard";
+import { FlatCompat } from "@eslint/eslintrc";
 
-const eslintConfig = defineConfig([
+const compat = new FlatCompat({
+    baseDirectory: import.meta.url,
+});
+
+export default defineConfig([
     ...nextVitals,
     ...nextTs,
-    standard,
+    ...compat.extends([
+        "standard",
+        "plugin:tailwindcss/recommended",
+        "prettier"
+    ]),
     globalIgnores([
         ".next/**",
         "out/**",
@@ -14,5 +22,3 @@ const eslintConfig = defineConfig([
         "next-env.d.ts",
     ]),
 ]);
-
-export default eslintConfig;
