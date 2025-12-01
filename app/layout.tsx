@@ -1,40 +1,44 @@
-import type { Metadata } from "next";
+import type {Metadata} from "next";
 import "./globals.css";
 import localFont from "next/font/local";
+import {ThemeProvider} from "next-themes";
+import theme from "@/context/theme";
 
 const Inter = localFont({
-    src : "./fonts/interVF.ttf",
-    variable : "--font-inter",
+    src: "./fonts/interVF.ttf",
+    variable: "--font-inter",
     weight: "100 200 300 400 500 600 700 800 900"
 })
 
-const SpaceGrotesk  = localFont({
-    src : "./fonts/SpaceGroteskVF.ttf",
-    variable : "--font-space-grotesk",
+const SpaceGrotesk = localFont({
+    src: "./fonts/SpaceGroteskVF.ttf",
+    variable: "--font-space-grotesk",
     weight: "100 200 300 400 500 600 700"
 })
 
 
 export const metadata: Metadata = {
-  title: "DevFlow",
-  description: "hello",
-    icons:{
-      icon: "../public/images/site-logo.svg",
+    title: "DevFlow",
+    description: "hello",
+    icons: {
+        icon: "../public/images/site-logo.svg",
     }
 };
 
 export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
+                                       children,
+                                   }: Readonly<{
+    children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
-  );
+    return (
+        <html lang="en" suppressHydrationWarning={true}>
+        <body
+            className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
+        >
+        <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true} disableTransitionOnChange={true}>
+            {children}
+        </ThemeProvider>
+        </body>
+        </html>
+    );
 }
