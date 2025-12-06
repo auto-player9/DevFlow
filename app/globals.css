@@ -334,6 +334,39 @@
     @apply min-h-full! dark:bg-dark-400! bg-light-800! text-light-500! dark:data-[state=active]:bg-dark-300! data-[state=active]:bg-primary-100! data-[state=active]:text-primary-500!;
 }
 
+@utility toast-base {
+    /* Background & Border */
+    @apply group-[.toaster]:bg-light-900 dark:group-[.toaster]:bg-dark-200;
+    @apply group-[.toaster]:border-light-800 dark:group-[.toaster]:border-dark-300;
+    @apply group-[.toaster]:border;
+
+    /* Text & Shadow */
+    @apply group-[.toaster]:text-dark-100 dark:group-[.toaster]:text-light-900;
+    @apply group-[.toaster]:shadow-light-100 dark:group-[.toaster]:shadow-dark-100;
+
+    /* Font & Shape */
+    @apply font-inter rounded-[var(--radius)] p-4;
+}
+
+@utility toast-description {
+    @apply group-[.toast]:text-light-500 dark:group-[.toast]:text-light-400;
+}
+
+@utility toast-action {
+    @apply group-[.toast]:bg-primary-500 group-[.toast]:text-white;
+    @apply group-[.toast]:hover:bg-primary-500/90 font-semibold;
+}
+
+@utility toast-cancel {
+    @apply group-[.toast]:bg-light-800 dark:group-[.toast]:bg-dark-300;
+    @apply group-[.toast]:text-dark-500 dark:group-[.toast]:text-light-700;
+}
+
+/* Optional: Success/Error Icons */
+@utility toast-icon {
+    @apply group-data-[type=error]:text-red-500 group-data-[type=success]:text-green-500;
+}
+
 @layer base {
     :root {
         --radius: 0.5rem;
@@ -450,6 +483,7 @@ code {
     display: grid !important;
     width: 100% !important;
 }
+
 /*
   ---break---
 */
@@ -527,6 +561,7 @@ code {
     --background: oklch(1 0 0);
     --foreground: oklch(0.129 0.042 264.695);
 }
+
 /*
   ---break---
 */
@@ -563,14 +598,17 @@ code {
     --sidebar-border: oklch(1 0 0 / 10%);
     --sidebar-ring: oklch(0.551 0.027 264.364);
 }
+
 /*
   ---break---
 */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+    * {
+        @apply border-border outline-ring/50;
     }
-  body {
-    @apply bg-background text-foreground;
+
+    body {
+        @apply bg-background text-foreground;
     }
 }
+

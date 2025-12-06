@@ -2,8 +2,10 @@ import type {Metadata} from "next";
 import "./globals.css";
 import localFont from "next/font/local";
 import {ThemeProvider} from "next-themes";
-import theme from "@/context/theme";
-import Navbar from "@/components/navigation/navbar";
+import {Toaster} from "@/components/ui/sonner";
+import {SessionProvider} from "next-auth/react";
+import {auth} from "@/auth"
+import React from "react";
 
 const Inter = localFont({
     src: "./fonts/interVF.ttf",
@@ -17,30 +19,38 @@ const SpaceGrotesk = localFont({
     weight: "100 200 300 400 500 600 700"
 })
 
-
 export const metadata: Metadata = {
     title: "DevFlow",
-    description: "hello",
+    description:
+        "A community-driven platform for asking and answering programming questions. Get help, share knowledge, and collaborate with developers from around the world. Explore topics in web development, mobile app development, algorithms, data structures, and more.",
     icons: {
-        icon: "../public/images/site-logo.svg",
-    }
+        icon: "/images/site-logo.svg",
+    },
 };
 
-export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+
+export default async function RootLayout({
+                                             children,
+                                         }: Readonly<{
     children: React.ReactNode;
 }>) {
+
+    const session = await auth();
+
     return (
         <html lang="en" suppressHydrationWarning={true}>
-        <body
-            className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
-        >
-        <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true} disableTransitionOnChange={true}>
-            <Navbar/>
-            {children}
-        </ThemeProvider>
-        </body>
+        <SessionProvider session={session}>
+            <body
+                className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
+            >
+            <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
+                           disableTransitionOnChange={true}>
+                {children}
+            </ThemeProvider>
+            <Toaster/>
+            </body>
+        </SessionProvider>
         </html>
     );
 }
+

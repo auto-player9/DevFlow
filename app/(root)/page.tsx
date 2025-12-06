@@ -6,8 +6,14 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {auth, signOut} from "@/auth";
+import {Button} from "@/components/ui/button";
+import ROUTES from "@/constants/routes"
 
-export default function Home() {
+export default async function Home() {
+    const session = await auth();
+    console.log(session);
+
     return (
         <>
             <h1 className={'h1-bold'}>hello this is inter font</h1>
@@ -23,6 +29,13 @@ export default function Home() {
                     <DropdownMenuItem>Subscription</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            <form className="px-10 py-8" action={async () => {
+                'use server';
+                await signOut({redirectTo: ROUTES.SIGN_IN})
+            }}>
+                <Button type="submit">Log out</Button>
+            </form>
         </>
     );
 }
