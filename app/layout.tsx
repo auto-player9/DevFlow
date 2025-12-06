@@ -8,7 +8,7 @@ import {auth} from "@/auth"
 import React from "react";
 
 const Inter = localFont({
-    src: "./fonts/interVF.ttf",
+    src: "./fonts/InterVF.ttf",
     variable: "--font-inter",
     weight: "100 200 300 400 500 600 700 800 900"
 })
