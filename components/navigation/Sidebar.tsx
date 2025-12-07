@@ -1,12 +1,13 @@
 'use client'
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import NavLinks from "@/components/navigation/navbar/NavLinks";
 import Routes from "@/constants/routes";
 import {Button} from "@/components/ui/button";
 import {useAuth} from '@clerk/nextjs'
+import {useState} from "react";
 import {
     Sidebar,
     SidebarContent,
@@ -21,6 +22,13 @@ import {
 
 function AppSidebar(): React.JSX.Element {
     const {isSignedIn, isLoaded} = useAuth()
+    const [isSignedOut, setIsSignedOut] = useState(true)
+
+    useEffect(() => {
+        if (isSignedIn) (
+            setIsSignedOut(isSignedIn)
+        )
+    }, [isSignedIn])
 
     if (!isLoaded) {
         return <></>;
