@@ -30,6 +30,8 @@ function AppSidebar(): React.JSX.Element {
         )
     }, [isSignedIn])
 
+    console.log(isSignedIn)
+
     if (!isLoaded) {
         return <></>;
     }

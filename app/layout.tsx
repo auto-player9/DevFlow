@@ -39,7 +39,7 @@ export default function RootLayout({
     return (
         <html lang="en" suppressHydrationWarning={true}>
         <ClerkProvider>
-            {/* تمت إزالة <SessionProvider session={session}> */}
+            {/* تمت إزالة <SessionProvider session={session}> حاليا*/}
             <body
                 className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
             >
