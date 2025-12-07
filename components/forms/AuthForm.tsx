@@ -1,7 +1,9 @@
 "use client"
 
 import {zodResolver} from "@hookform/resolvers/zod"
-import {DefaultValues, FieldValues, Path, SubmitHandler, useForm} from "react-hook-form"
+import {DefaultValues, Path, SubmitHandler, useForm, FieldValues, Resolver} from "react-hook-form"
+
+import { ZodSchema, ZodObject } from "zod";
 
 import {Button} from "@/components/ui/button"
 import {
@@ -18,26 +20,27 @@ import ROUTES from "@/constants/routes";
 import Link from "next/link";
 
 
-interface AuthFormProps<T extends FieldValues> {
-    schema: T,
+interface AuthFormProps<T extends FieldValues, S extends ZodObject<any, any>> {
+
+    schema: S & ZodSchema<T>,
     defaultValues: DefaultValues<T>,
     onSubmit: (data: T) => Promise<{ success: boolean }>,
     formType: "SIGN_IN" | "SIGN_UP",
 }
 
-export function AuthForm<T extends FieldValues>({schema, defaultValues, formType, onSubmit}: AuthFormProps<T>): React.JSX.Element {
+
+export function AuthForm<T extends FieldValues, S extends ZodObject<any, any>>({schema, defaultValues, formType, onSubmit}: AuthFormProps<T, S>): React.JSX.Element {
 
     type FormSchema = T;
 
+    const resolver = zodResolver(schema) as unknown as Resolver<FormSchema, any>;
+
     const form = useForm<FormSchema>({
-        resolver: zodResolver(schema),
-        defaultValues: defaultValues as DefaultValues<FormSchema> // <--- تصحيح الفرض ليتطابق مع FormSchema
+        resolver: resolver,
+        defaultValues: defaultValues as DefaultValues<FormSchema>
     })
 
 
-    // const handleSubmit: SubmitHandler = async () => {
-         //TODO : Authenticate User
-    // }
     const buttonText: "Sign In" | "Sign Up" = formType === "SIGN_IN" ? "Sign In" : "Sign Up"
     return (
         <Form {...form}>

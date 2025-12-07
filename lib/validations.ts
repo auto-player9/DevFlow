@@ -8,6 +8,9 @@ export const SignInSchema = z.object({
         .min(6, { message: "Password must be at least 6 characters long" })
         .max(100, {message: "Password cannot exceed 100 characters long."})
 });
+
+export type SignInSchemaType = z.infer<typeof SignInSchema>;
+
 export const SignUpSchema = z.object({
     username: z
         .string()
@@ -16,6 +19,7 @@ export const SignUpSchema = z.object({
         .regex(/^[a-zA-Z0-9_]+$/, {
             message: "Username can only contain letters, numbers, and underscores.",
         }),
+
 
     name: z
         .string()
