@@ -22,6 +22,8 @@ import {
 function AppSidebar(): React.JSX.Element {
     const {isSignedIn, isLoaded} = useAuth()
 
+    console.log(isSignedIn)
+
     if (!isLoaded) {
         return <></>;
     }
