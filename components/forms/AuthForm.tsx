@@ -2,7 +2,6 @@
 
 import {zodResolver} from "@hookform/resolvers/zod"
 import {DefaultValues, FieldValues, Path, SubmitHandler, useForm} from "react-hook-form"
-import {z} from "zod"
 
 import {Button} from "@/components/ui/button"
 import {
@@ -21,32 +20,35 @@ import Link from "next/link";
 
 interface AuthFormProps<T extends FieldValues> {
     schema: T,
-    defaultValues: T,
+    defaultValues: DefaultValues<T>,
     onSubmit: (data: T) => Promise<{ success: boolean }>,
     formType: "SIGN_IN" | "SIGN_UP",
 }
 
-export function AuthForm({schema, defaultValues, formType, onSubmit}: AuthFormProps<T>): React.JSX.Element {
-    // 1. Define your form.
-    const form = useForm<z.infer<typeof schema>>({
+export function AuthForm<T extends FieldValues>({schema, defaultValues, formType, onSubmit}: AuthFormProps<T>): React.JSX.Element {
+
+    type FormSchema = T;
+
+    const form = useForm<FormSchema>({
         resolver: zodResolver(schema),
-        defaultValues: defaultValues as DefaultValues<T>
+        defaultValues: defaultValues as DefaultValues<FormSchema> // <--- تصحيح الفرض ليتطابق مع FormSchema
     })
 
-    const handleSubmit: SubmitHandler<T> = async () => {
-        //TODO : Authenticate User
-    }
+
+    // const handleSubmit: SubmitHandler = async () => {
+         //TODO : Authenticate User
+    // }
     const buttonText: "Sign In" | "Sign Up" = formType === "SIGN_IN" ? "Sign In" : "Sign Up"
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="mt-10 space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit as SubmitHandler<T>)} className="mt-10 space-y-6">
                 {Object.keys(defaultValues).map((field) => {
                     const formLabelName: string = field === "email" ? "Email Address" : field[0].toUpperCase() + field.slice(1)
                     return (
                         <FormField
                             key={field}
                             control={form.control}
-                            name={field as Path<T>}
+                            name={field as Path<FormSchema>}
                             render={({field}) => (
                                 <FormItem className="flex flex-col w-full gap-2.5">
                                     <FormLabel
