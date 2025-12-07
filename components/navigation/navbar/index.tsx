@@ -3,7 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {Theme} from "./Theme";
 import MobileNavigation from "@/components/navigation/navbar/MobileNavigation";
-import Sidebar from "@/components/navigation/navbar/Sidebar";
+
 function  Navbar() : React.JSX.Element {
     return (
         <>
@@ -18,7 +18,6 @@ function  Navbar() : React.JSX.Element {
                 <div className={"flex-between gap-5"}>
                     <Theme />
                     <MobileNavigation />
-                    <Sidebar/>
                 </div>
             </nav>
         </>
