@@ -47,7 +47,7 @@ async function AppSidebar() {
                                     <NavLinks isMobileNav/>
                                 </section>
                             </SidebarMenu>
-                            {!session && <div className="flex flex-col gap-3">
+                            {!isSignedIn && <div className="flex flex-col gap-3">
                                 <div>
                                     <Link href={Routes.SIGN_IN}>
                                         <Button
