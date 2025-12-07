@@ -9,7 +9,7 @@ function SignIn(): React.JSX.Element {
         <>
             <AuthForm formType="SIGN_IN" schema={SignInSchema} defaultValues={{email: "", password: ""}}
                       onSubmit={(data) => {
-                          return Promise.resolve({success: true, data})
+                          return  Promise.resolve({success: true, data})
                       }}/>
         </>
     )
