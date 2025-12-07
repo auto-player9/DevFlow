@@ -6,6 +6,7 @@ import {Toaster} from "@/components/ui/sonner";
 import {SessionProvider} from "next-auth/react";
 import {auth} from "@/auth"
 import React from "react";
+import {ClerkProvider} from "@clerk/nextjs";
 
 const Inter = localFont({
     src: "./fonts/InterVF.ttf",
@@ -39,17 +40,19 @@ export default async function RootLayout({
 
     return (
         <html lang="en" suppressHydrationWarning={true}>
-        <SessionProvider session={session}>
-            <body
-                className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
-            >
-            <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
-                           disableTransitionOnChange={true}>
-                {children}
-            </ThemeProvider>
-            <Toaster/>
-            </body>
-        </SessionProvider>
+        <ClerkProvider>
+            <SessionProvider session={session}>
+                <body
+                    className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
+                >
+                <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
+                               disableTransitionOnChange={true}>
+                    {children}
+                </ThemeProvider>
+                <Toaster/>
+                </body>
+            </SessionProvider>
+        </ClerkProvider>
         </html>
     );
 }
