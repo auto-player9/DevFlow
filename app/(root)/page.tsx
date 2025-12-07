@@ -16,7 +16,7 @@ export default async function Home() {
 
     return (
         <>
-            <h1 className={'h1-bold'}>hello this is Inter font</h1>
+            <h1 className={'h1-bold'}>hello this is inter font</h1>
             <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1>
             <DropdownMenu>
                 <DropdownMenuTrigger>Open</DropdownMenuTrigger>
