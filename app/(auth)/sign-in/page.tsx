@@ -14,3 +14,5 @@ function SignIn(): React.JSX.Element {
         </>
     )
 }
+
+export default SignIn;
