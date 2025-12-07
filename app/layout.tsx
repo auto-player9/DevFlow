@@ -4,7 +4,7 @@ import localFont from "next/font/local";
 import {ThemeProvider} from "next-themes";
 import {Toaster} from "@/components/ui/sonner";
 import React from "react";
-import {ClerkProvider} from "@clerk/nextjs"; // تم الإبقاء على Clerk Provider
+import {SessionProvider} from "next-auth/react";
 
 const Inter = localFont({
     src: "./fonts/InterVF.ttf",
@@ -34,12 +34,11 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
 
-    // تمت إزالة const session = await auth();
 
     return (
         <html lang="en" suppressHydrationWarning={true}>
-        <ClerkProvider>
-            {/* تمت إزالة <SessionProvider session={session}> حاليا*/}
+        <SessionProvider>
+
             <body
                 className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
             >
@@ -50,7 +49,7 @@ export default function RootLayout({
             <Toaster/>
             </body>
             {/* تمت إزالة </SessionProvider> */}
-        </ClerkProvider>
+        </SessionProvider>
         </html>
     );
 }

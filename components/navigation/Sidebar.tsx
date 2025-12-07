@@ -18,23 +18,11 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import {auth} from "@/auth";
 
 
-function AppSidebar(): React.JSX.Element {
-    const {isSignedIn, isLoaded} = useAuth()
-    const [isSignedOut, setIsSignedOut] = useState(true)
-
-    useEffect(() => {
-        if (isSignedIn) (
-            setIsSignedOut(isSignedIn)
-        )
-    }, [isSignedIn])
-
-    console.log(isSignedIn)
-
-    if (!isLoaded) {
-        return <></>;
-    }
+async function AppSidebar() {
+    const session = await auth();
 
     return (
         <Sidebar>
@@ -59,7 +47,7 @@ function AppSidebar(): React.JSX.Element {
                                     <NavLinks isMobileNav/>
                                 </section>
                             </SidebarMenu>
-                            {!isSignedIn && <div className="flex flex-col gap-3">
+                            {!session && <div className="flex flex-col gap-3">
                                 <div>
                                     <Link href={Routes.SIGN_IN}>
                                         <Button
