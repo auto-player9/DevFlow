@@ -30,8 +30,6 @@ function AppSidebar(): React.JSX.Element {
         )
     }, [isSignedIn])
 
-    console.log(isSignedIn)
-
     if (!isLoaded) {
         return <></>;
     }
@@ -59,7 +57,7 @@ function AppSidebar(): React.JSX.Element {
                                     <NavLinks isMobileNav/>
                                 </section>
                             </SidebarMenu>
-                            {!isSignedIn && <div className="flex flex-col gap-3">
+                            {isSignedOut && <div className="flex flex-col gap-3">
                                 <div>
                                     <Link href={Routes.SIGN_IN}>
                                         <Button
