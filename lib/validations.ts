@@ -1,16 +1,13 @@
 import { z } from "zod";
 
-export const SignInSchema: z.ZodObject<{
-    email: z.ZodEmail
-    password: z.ZodString
-}, z.core.$strip>  = z.object({
-    email: z.email({ message: "Please provide a valid email address" })
-        .min(1, { message: "Email is required" }),
+export const SignInSchema = z.object({
+    email: z.string() // Use z.string() and chain .email()
+        .min(1, { message: "Email is required" })
+        .email({ message: "Please provide a valid email address" }),
     password: z.string()
         .min(6, { message: "Password must be at least 6 characters long" })
         .max(100, {message: "Password cannot exceed 100 characters long."})
 });
-
 export const SignUpSchema = z.object({
     username: z
         .string()
