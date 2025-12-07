@@ -6,7 +6,7 @@ import Link from "next/link";
 import NavLinks from "@/components/navigation/navbar/NavLinks";
 import Routes from "@/constants/routes";
 import {Button} from "@/components/ui/button";
-import {useAuth} from '@clerk/clerk-react'
+import {useAuth} from '@clerk/nextjs'
 import {
     Sidebar,
     SidebarContent,
@@ -20,7 +20,11 @@ import {
 
 
 function AppSidebar(): React.JSX.Element {
-    const {isSignedIn} = useAuth()
+    const {isSignedIn, isLoaded} = useAuth()
+
+    if (!isLoaded) {
+        return <></>;
+    }
 
     return (
         <Sidebar>

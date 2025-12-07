@@ -3,10 +3,8 @@ import "./globals.css";
 import localFont from "next/font/local";
 import {ThemeProvider} from "next-themes";
 import {Toaster} from "@/components/ui/sonner";
-import {SessionProvider} from "next-auth/react";
-import {auth} from "@/auth"
 import React from "react";
-import {ClerkProvider} from "@clerk/nextjs";
+import {ClerkProvider} from "@clerk/nextjs"; // تم الإبقاء على Clerk Provider
 
 const Inter = localFont({
     src: "./fonts/InterVF.ttf",
@@ -30,30 +28,29 @@ export const metadata: Metadata = {
 };
 
 
-export default async function RootLayout({
-                                             children,
-                                         }: Readonly<{
+export default function RootLayout({
+                                       children,
+                                   }: Readonly<{
     children: React.ReactNode;
 }>) {
 
-    const session = await auth();
+    // تمت إزالة const session = await auth();
 
     return (
         <html lang="en" suppressHydrationWarning={true}>
         <ClerkProvider>
-            <SessionProvider session={session}>
-                <body
-                    className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
-                >
-                <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
-                               disableTransitionOnChange={true}>
-                    {children}
-                </ThemeProvider>
-                <Toaster/>
-                </body>
-            </SessionProvider>
+            {/* تمت إزالة <SessionProvider session={session}> */}
+            <body
+                className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
+            >
+            <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
+                           disableTransitionOnChange={true}>
+                {children}
+            </ThemeProvider>
+            <Toaster/>
+            </body>
+            {/* تمت إزالة </SessionProvider> */}
         </ClerkProvider>
         </html>
     );
 }
-
