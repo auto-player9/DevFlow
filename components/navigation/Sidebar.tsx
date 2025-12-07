@@ -18,7 +18,8 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import {auth} from "@/auth";
+import {auth, signOut} from "@/auth";
+import ROUTES from "@/constants/routes";
 
 
 async function AppSidebar() {
@@ -47,24 +48,36 @@ async function AppSidebar() {
                                     <NavLinks isMobileNav/>
                                 </section>
                             </SidebarMenu>
-                            {!isSignedIn && <div className="flex flex-col gap-3">
+                            {!session ? <div className="flex flex-col gap-3">
+                                    <div>
+                                        <Link href={Routes.SIGN_IN}>
+                                            <Button
+                                                className={"Small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"}>
+                                                <span className="primary-text-gradient">Log In</span>
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                    <div>
+                                        <Link href={Routes.SIGN_UP}>
+                                            <Button
+                                                className={"Small-medium light-border-2 btn-tertiary text-dark400_light900 min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"}>
+                                                Sign Up
+                                            </Button>
+                                        </Link>
+                                    </div>
+                                </div> :
                                 <div>
-                                    <Link href={Routes.SIGN_IN}>
+                                    <form action={async () => {
+                                        'use server';
+                                        await signOut({redirectTo: ROUTES.SIGN_IN})
+                                    }}>
                                         <Button
                                             className={"Small-medium btn-secondary min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"}>
-                                            <span className="primary-text-gradient">Log In</span>
+                                            <span className="primary-text-gradient">Sign Out</span>
                                         </Button>
-                                    </Link>
+                                    </form>
                                 </div>
-                                <div>
-                                    <Link href={Routes.SIGN_UP}>
-                                        <Button
-                                            className={"Small-medium light-border-2 btn-tertiary text-dark400_light900 min-h-[41px] w-full rounded-lg px-4 py-3 shadow-none"}>
-                                            Sign Up
-                                        </Button>
-                                    </Link>
-                                </div>
-                            </div>}
+                            }
                         </div>
                     </SidebarGroupContent>
                 </SidebarGroup>
