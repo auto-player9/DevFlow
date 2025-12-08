@@ -73,29 +73,7 @@ export default async function Home() {
             <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
             <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
             <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1><h1 className={'h1-bold'}>hello this is inter font</h1>
-            <h1 className={'h1-bold font-space-grotesk'}>Welcome this is sapce-grotesk font</h1>
+
         </>
     );
 }
