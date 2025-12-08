@@ -7,7 +7,7 @@ import MobileNavigation from "@/components/navigation/navbar/MobileNavigation";
 function  Navbar() : React.JSX.Element {
     return (
         <>
-            <nav className={'flex-between w-full z-50 p-6 sm:px-12 shadow-light-300 dark:shadow-none background-light900_dark200'}>
+            <nav className={'flex-between w-full p-6 sm:px-12 shadow-light-300 dark:shadow-none background-light900_dark200'}>
                 <Link href="/" className={'flex items-center gap-1'}>
                     <Image src="images/site-logo.svg" width={23} height={23} alt="DevFlowLogo" />
                     <p className={"h1-old font-space-grotesk text-dark-100 dark:text-light-900 max-sm:hidden"}>

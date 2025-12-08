@@ -4,7 +4,7 @@ export const themes = [
     { value: "system", label: "System", icon: "/icons/computer.svg" },
 ];
 
-export const sidebarLinks = [
+export const mobileSidebarLinks = [
     {
         imgURL: "/icons/home.svg",
         route: "/",
@@ -39,6 +39,44 @@ export const sidebarLinks = [
         imgURL: "/icons/question.svg",
         route: "/ask-question",
         label: "Ask a question",
+    },
+];
+
+export const sidebarLinks = [
+    {
+        imgURL: "/icons/home.svg",
+        route: "/",
+        label: "Home",
+    },
+    {
+        imgURL: "/icons/star.svg",
+        route: "/collection",
+        label: "Collections",
+    },
+    {
+        imgURL: "/icons/suitcase.svg",
+        route: "/jobs",
+        label: "Find Jobs",
+    },
+    {
+        imgURL: "/icons/tag.svg",
+        route: "/tags",
+        label: "Tags",
+    },
+    {
+        imgURL: "/icons/users.svg",
+        route: "/community",
+        label: "Communities",
+    },
+    {
+        imgURL: "/icons/question.svg",
+        route: "/ask-question",
+        label: "Ask a Question",
+    },
+    {
+        imgURL: "/icons/users.svg",
+        route: "/recommended-questions",
+        label: "Recommended Qs",
     },
 ];
 

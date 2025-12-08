@@ -1,20 +1,22 @@
 import Navbar from "@/components/navigation/navbar";
-import {SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar"
-import Sidebar from "@/components/navigation/Sidebar"
 import React from "react";
-
+import LeftSidebar from "@/components/navigation/LeftSidebar";
 
 export default function RootLayout({children}: {
     children: React.ReactNode
 }) {
     return (
-        <SidebarProvider>
-            <Sidebar/>
-            <main className="w-full">
-                <Navbar/>
-                {children}
-            </main>
-        </SidebarProvider>
+        <main className="background-light850_dark100 relative">
+            <Navbar/>
+            <div className="flex">
+                <LeftSidebar/>
+                <section className="flex min-h-screen flex-1 flex-col px-6 pb-6 pt-36 max-md:pb-14 sm:px-14">
+                    <div className="mx-auto">
+                        {children}
+                    </div>
+                </section>
+            </div>
+        </main>
     );
 }
 

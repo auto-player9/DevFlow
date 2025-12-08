@@ -5,6 +5,7 @@ import {ThemeProvider} from "next-themes";
 import {Toaster} from "@/components/ui/sonner";
 import React from "react";
 import {SessionProvider} from "next-auth/react";
+import {ClerkProvider} from "@clerk/nextjs";
 
 const Inter = localFont({
     src: "./fonts/InterVF.ttf",
@@ -36,20 +37,22 @@ export default function RootLayout({
 
 
     return (
-        <html lang="en" suppressHydrationWarning={true}>
-        <SessionProvider>
+        <ClerkProvider>
+            <html lang="en" suppressHydrationWarning={true}>
+            <SessionProvider>
 
-            <body
-                className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
-            >
-            <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
-                           disableTransitionOnChange={true}>
-                {children}
-            </ThemeProvider>
-            <Toaster/>
-            </body>
-            {/* تمت إزالة </SessionProvider> */}
-        </SessionProvider>
-        </html>
+                <body
+                    className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
+                >
+                <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
+                               disableTransitionOnChange={true}>
+                    {children}
+                </ThemeProvider>
+                <Toaster/>
+                </body>
+
+            </SessionProvider>
+            </html>
+        </ClerkProvider>
     );
 }
