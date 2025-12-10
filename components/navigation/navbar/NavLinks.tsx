@@ -24,7 +24,7 @@ function NavLinks({isMobileNav}: { isMobileNav?: boolean }) {
                         )}>
                             <Image src={item.imgURL} alt={item.label} width={20} height={20}
                                    className={cn(
-                                       isActive ? "base-bold" : "base-medium",
+                                       isActive ? "base-bold" : "base-medium", "invert-colors"
                                    )}
                             />
                             <p className={cn(!isMobileNav && "max-lg:hidden")}>{item.label}</p>

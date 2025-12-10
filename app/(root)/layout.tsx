@@ -1,6 +1,7 @@
 import Navbar from "@/components/navigation/navbar";
 import React from "react";
 import LeftSidebar from "@/components/navigation/LeftSidebar";
+import RightSidebar from "@/components/navigation/RightSidebar";
 
 export default function RootLayout({children}: {
     children: React.ReactNode
@@ -15,6 +16,7 @@ export default function RootLayout({children}: {
                         {children}
                     </div>
                 </section>
+                <RightSidebar/>
             </div>
         </main>
     );
