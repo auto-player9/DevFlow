@@ -40,7 +40,6 @@ export default function RootLayout({
         <ClerkProvider>
             <html lang="en" suppressHydrationWarning={true}>
             <head>
-                <title>DevFloe</title>
                 <link rel="stylesheet" type='text/css'
                       href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
 
