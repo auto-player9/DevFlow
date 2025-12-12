@@ -1,16 +1,26 @@
 'use client';
 
-import {Path, useForm} from "react-hook-form";
+import {useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {AskQuestionSchema} from "@/lib/validations";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
-import React from "react";
+import React, {useRef} from "react";
 import {Button} from "@/components/ui/button";
+import dynamic from 'next/dynamic'
+
+import { type MDXEditorMethods} from '@mdxeditor/editor'
+import {z} from "zod";
+import TagCard from "@/components/cards/TagCard";
+
+const Editor = dynamic(() => import('@/components/editor'), {
+    // Make sure we turn SSR off
+    ssr: false
+})
 
 export default function QuestionForm() {
-
-    const form = useForm({
+    const editorRef = useRef<MDXEditorMethods>(null)
+    const form = useForm<z.infer<typeof AskQuestionSchema>>({
         resolver: zodResolver(AskQuestionSchema),
         defaultValues: {
             title: "",
@@ -19,8 +29,44 @@ export default function QuestionForm() {
         }
     });
 
-    const handleCreateQuestion = () => {
+    const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement> , field: {value : string[]}) => {
+        if(e.key === "Enter") {
+            e.preventDefault();
+            const tagInput = e.currentTarget.value.trim();
 
+            if(tagInput && tagInput.length < 15 && !field.value.includes(tagInput)) {
+                form.setValue("tags", [...field.value ,tagInput]);
+                e.currentTarget.value = "";
+                form.clearErrors("tags")
+            } else if (tagInput.length > 15) {
+                form.setError("tags" , {
+                    type: "manual",
+                    message : "Tag should be less than 15 characters",
+                })
+            } else if (field.value.includes(tagInput)) {
+                form.setError("tags", {
+                    type: "manual",
+                    message: "Tag already exists",
+                })
+            }
+        }
+    }
+
+    const handleToRemove = (tag: string, field:{ value :string[]}) => {
+        const newTags = field.value.filter((t) => t !== tag);
+        form.setValue("tags", newTags);
+
+        if (newTags.length === 0) {
+            form.setError("tags" , {
+                type: "manual",
+                message : "Tags are required",
+            })
+        }
+
+    }
+
+    const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
+        console.log(data)
     }
 
     return (
@@ -60,7 +106,7 @@ export default function QuestionForm() {
                                     problem <span
                                         className="text-primary-500">*</span></FormLabel>
                                 <FormControl>
-                                    Editor
+                                    <Editor fieldChange={field.onChange} value={field.value} editorRef={editorRef}/>
                                 </FormControl>
                                 <FormDescription className="body-regular mt-2.5 text-light-500">
                                     Introduce your problem and expand on what you've in the title.
@@ -80,10 +126,19 @@ export default function QuestionForm() {
                                 <FormControl>
                                     <div>
                                         <Input
-                                            {...field} placeholder="Add tags..."
+                                            placeholder="Add tags..."
+                                            onKeyDown={(e) => handleInputKeyDown(e,field)}
                                             className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border w-full"
                                         />
-                                        Tags
+                                        {field.value &&
+                                            <div className="flex-start mt-2.5 flex-wrap gap-2.5">
+                                                {field.value?.map((tag: string) => (<TagCard key={tag} _id={tag} name={tag} compact remove isButton handleRemoveQuestion={() => {
+                                                    handleToRemove(tag,field)
+                                                }
+                                                } />))
+                                                }
+                                            </div>
+                                        }
                                     </div>
                                 </FormControl>
                                 <FormDescription className="body-regular mt-2.5 text-light-500">

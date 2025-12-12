@@ -4,9 +4,9 @@ import Image from "next/image";
 interface Props {
     imgUrl: string;
     alt: string;
-    value: string;
+    value: string | number;
     title: string;
-    href: string;
+    href?: string;
     textStyles: string;
     imgStyles: string;
     isAuthor?: boolean;

@@ -37,7 +37,7 @@ export default function QuestionCard({
                 <div className="mt-3.5 flex w-full flex-wrap gap-2">
                     {
                         tags.map((tag:Tag) => (
-                            <TagCard key={tag._id} _id={tag._id} name={tag.name} compact/>
+                            <TagCard key={tag._id} _id={tag._id} name={tag.name} compact isButton={false} />
                         ))
                     }
                 </div>
@@ -46,11 +46,12 @@ export default function QuestionCard({
                             value={author.name}  title={`asked ${getTimeStamp(createdAt)}`}
                             textStyles="body-medium text-dark400_light700"
                             isAuthor
+                            imgStyles={""}
                     />
                     <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
-                        <Matric imgUrl={"/icons/like.svg"} alt="like" value={upvotes} title=" Votes" textStyles="small-medium text-dark400_light800" />
-                        <Matric imgUrl={"/icons/message.svg"} alt="answers" value={answers} title=" Answers" textStyles="small-medium text-dark400_light800" />
-                        <Matric imgUrl={"/icons/eye.svg"} alt="views" value={views} title=" Views" textStyles="small-medium text-dark400_light800" />
+                        <Matric imgStyles={""} imgUrl={"/icons/like.svg"} alt="like" value={upvotes} title=" Votes" textStyles="small-medium text-dark400_light800" />
+                        <Matric imgStyles={""} imgUrl={"/icons/message.svg"} alt="answers" value={answers} title=" Answers" textStyles="small-medium text-dark400_light800" />
+                        <Matric imgStyles={""} imgUrl={"/icons/eye.svg"} alt="views" value={views} title=" Views" textStyles="small-medium text-dark400_light800" />
                     </div>
                 </div>
 
