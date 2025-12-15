@@ -86,7 +86,7 @@ export default function QuestionForm() {
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border w-full"
+                                        className="paragraph-regular p-2 background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border w-full"
                                     />
                                 </FormControl>
                                 <FormDescription className="body-regular mt-2.5 text-light-500">
@@ -128,7 +128,7 @@ export default function QuestionForm() {
                                         <Input
                                             placeholder="Add tags..."
                                             onKeyDown={(e) => handleInputKeyDown(e,field)}
-                                            className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border w-full"
+                                            className="paragraph-regular p-2 background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-[56px] border w-full"
                                         />
                                         {field.value &&
                                             <div className="flex-start mt-2.5 flex-wrap gap-2.5">
