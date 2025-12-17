@@ -1,24 +1,16 @@
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {auth, signOut} from "@/auth";
 import {Button} from "@/components/ui/button";
 import ROUTES from "@/constants/routes"
 import Link from "next/link";
 import LocaleSearch from "@/components/search/LocalSearch"
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
+import handleError from "@/lib/handlers/error";
 
 interface SearchParams {
     searchParams: Promise<{[key : string]:string }>
 }
 
-const filteredQuestions: Question[] = [
+const questions: Question[] = [
     {
         _id: "1",
         title: "How to learn react ?",
@@ -70,8 +62,18 @@ const filteredQuestions: Question[] = [
 
     }
 ]
+
+
+
 export default async function Home({searchParams} : SearchParams) {
-    // const {query ='' , filter = ''} = searchParams;
+
+    const {query ='' , filter = ''} = await searchParams;
+    const filteredQuestions = questions.filter(question => {
+        const matchQuery =  question.title.toLowerCase().includes(query.toLowerCase());
+        const matchFilter = filter ? question.tags[0].name.toLowerCase(): true
+        return matchQuery && matchFilter;
+    })
+
 
     return (
         <>
