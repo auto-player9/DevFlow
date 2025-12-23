@@ -3,6 +3,7 @@ import {model, models, Schema, Types} from 'mongoose';
 export interface IAccount {
     userId: Types.ObjectId;
     name: string;
+    email: string;
     image?: string;
     password?: string;
     provider: string;

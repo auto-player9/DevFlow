@@ -4,7 +4,11 @@ import Link from "next/link";
 import LocaleSearch from "@/components/search/LocalSearch"
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
+import {ValidationError} from "@/lib/http-errors";
 import handleError from "@/lib/handlers/error";
+import dbConnect from "@/lib/mongoose"
+import {Question} from "@/types/global";
+
 
 interface SearchParams {
     searchParams: Promise<{[key : string]:string }>
@@ -63,9 +67,18 @@ const questions: Question[] = [
     }
 ]
 
-
+const test = async () => {
+    try {
+        await dbConnect()
+    }catch (error) {
+        return handleError(error)
+    }
+}
 
 export default async function Home({searchParams} : SearchParams) {
+
+    const result = await test();
+    console.log(result);
 
     const {query ='' , filter = ''} = await searchParams;
     const filteredQuestions = questions.filter(question => {
