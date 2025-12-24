@@ -5,7 +5,7 @@ import dbConnect from "@/lib/mongoose";
 import {NextResponse} from "next/server";
 import {AccountSchema} from "@/lib/validations";
 import Account from "@/database/account.model";
-import {ValidationError} from "ajv";
+import {ValidationError} from "@/lib/http-errors";
 
 
 export async function GET(_:Request, {params} : {params: Promise<{id: string}>}) {
@@ -51,7 +51,7 @@ export async function PUT(request:Request, {params} : {params: Promise<{id: stri
         const validatedData = AccountSchema.partial().safeParse(body);
 
         if(!validatedData.success){
-            throw new ValidationError(validatedData.error.flatten().fieldErrors as any)
+            throw new ValidationError(validatedData.error.flatten().fieldErrors)
 }
         const account = await Account.findByIdAndUpdate(id , validatedData, {new: true});
         if (!account) throw new NotFoundError("Account");
