@@ -1,4 +1,5 @@
 import {z} from "zod";
+import {Types} from "mongoose";
 
 export const SignInSchema = z.object({
     email: z.string() // Use z.string() and chain .email()
@@ -74,4 +75,28 @@ export const UserSchema = z.object({
     location: z.string().optional(),
     portfolio: z.string().url({message: "Please Provide a Valid URL."}).optional(),
     reputation: z.number().optional(),
+});
+
+export const AccountSchema = z.object({
+    userId: z.instanceof(Types.ObjectId, {
+        message: "Invalid User ID format",
+    }),
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Please provide a valid email address"),
+    image: z.string().url("Please provide a valid URL").optional(),
+    password: z.string()
+        .min(6, {message: "Password must be at least 6 characters long."})
+        .max(100, {message: "Password cannot exceed 100 characters."})
+        .regex(/[A-Z]/, {
+            message: "Password must contain at least one uppercase letter.",
+        })
+        .regex(/[a-z]/, {
+            message: "Password must contain at least one lowercase letter.",
+        })
+        .regex(/[0-9]/, {message: "Password must contain at least one number."})
+        .regex(/[^a-zA-Z0-9]/, {
+            message: "Password must contain at least one special character.",
+        }).optional(),
+    provider: z.string().min(1, "Provider is required"),
+    providerAccountId: z.string().min(1, "Provider Account ID is required"),
 });

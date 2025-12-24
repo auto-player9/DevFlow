@@ -67,18 +67,7 @@ const questions: Question[] = [
     }
 ]
 
-const test = async () => {
-    try {
-        await dbConnect()
-    }catch (error) {
-        return handleError(error)
-    }
-}
-
 export default async function Home({searchParams} : SearchParams) {
-
-    const result = await test();
-    console.log(result);
 
     const {query ='' , filter = ''} = await searchParams;
     const filteredQuestions = questions.filter(question => {
