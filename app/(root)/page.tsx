@@ -4,9 +4,6 @@ import Link from "next/link";
 import LocaleSearch from "@/components/search/LocalSearch"
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
-import {ValidationError} from "@/lib/http-errors";
-import handleError from "@/lib/handlers/error";
-import dbConnect from "@/lib/mongoose"
 import {Question} from "@/types/global";
 
 

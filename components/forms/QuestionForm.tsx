@@ -14,7 +14,6 @@ import {z} from "zod";
 import TagCard from "@/components/cards/TagCard";
 
 const Editor = dynamic(() => import('@/components/editor'), {
-    // Make sure we turn SSR off
     ssr: false
 })
 

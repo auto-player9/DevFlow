@@ -1,8 +1,9 @@
-import {z} from "zod";
-import {Types} from "mongoose";
+import { z } from "zod";
+
+const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
 
 export const SignInSchema = z.object({
-    email: z.string() // Use z.string() and chain .email()
+    email: z.string()
         .min(1, {message: "Email is required"})
         .email({message: "Please provide a valid email address"}),
     password: z.string()
@@ -20,8 +21,6 @@ export const SignUpSchema = z.object({
         .regex(/^[a-zA-Z0-9_]+$/, {
             message: "Username can only contain letters, numbers, and underscores.",
         }),
-
-
     name: z
         .string()
         .min(1, {message: "Name is required."})
@@ -29,26 +28,18 @@ export const SignUpSchema = z.object({
         .regex(/^[a-zA-Z\s]+$/, {
             message: "Name can only contain letters and spaces.",
         }),
-
     email: z
         .string()
         .min(1, {message: "Email is required."})
         .email({message: "Please provide a valid email address."}),
-
     password: z
         .string()
         .min(6, {message: "Password must be at least 6 characters long."})
         .max(100, {message: "Password cannot exceed 100 characters."})
-        .regex(/[A-Z]/, {
-            message: "Password must contain at least one uppercase letter.",
-        })
-        .regex(/[a-z]/, {
-            message: "Password must contain at least one lowercase letter.",
-        })
-        .regex(/[0-9]/, {message: "Password must contain at least one number."})
-        .regex(/[^a-zA-Z0-9]/, {
-            message: "Password must contain at least one special character.",
-        }),
+        .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
+        .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
+        .regex(/[0-9]/, { message: "Password must contain at least one number." })
+        .regex(/[^a-zA-Z0-9]/, { message: "Password must contain at least one special character." }),
 });
 
 export const AskQuestionSchema = z.object({
@@ -65,7 +56,6 @@ export const AskQuestionSchema = z.object({
         .max(3 , {message: "Cannnot add more than 3 tags"})
 })
 
-
 export const UserSchema = z.object({
     name: z.string().min(1, {message: "Name is required"}),
     username: z.string().min(3, {message: "Username must be at least 3 characters long."}),
@@ -78,7 +68,7 @@ export const UserSchema = z.object({
 });
 
 export const AccountSchema = z.object({
-    userId: z.instanceof(Types.ObjectId, {
+    userId: z.string().regex(ObjectIdRegex, {
         message: "Invalid User ID format",
     }),
     name: z.string().min(1, "Name is required"),
@@ -87,16 +77,22 @@ export const AccountSchema = z.object({
     password: z.string()
         .min(6, {message: "Password must be at least 6 characters long."})
         .max(100, {message: "Password cannot exceed 100 characters."})
-        .regex(/[A-Z]/, {
-            message: "Password must contain at least one uppercase letter.",
-        })
-        .regex(/[a-z]/, {
-            message: "Password must contain at least one lowercase letter.",
-        })
-        .regex(/[0-9]/, {message: "Password must contain at least one number."})
-        .regex(/[^a-zA-Z0-9]/, {
-            message: "Password must contain at least one special character.",
-        }).optional(),
+        .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter." })
+        .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter." })
+        .regex(/[0-9]/, { message: "Password must contain at least one number." })
+        .regex(/[^a-zA-Z0-9]/, { message: "Password must contain at least one special character." })
+        .optional(),
     provider: z.string().min(1, "Provider is required"),
     providerAccountId: z.string().min(1, "Provider Account ID is required"),
 });
+
+export const SignInWithOAuthSchema = z.object({
+    provider: z.enum(['google', 'github']),
+    providerAccountId: z.string().min(1, "Provider Account ID is required"),
+    user: z.object({
+        name: z.string().min(1, {message: "Username is required"}),
+        username: z.string().min(3, {message: "Username must be at least 3 characters long."}),
+        email: z.string().email({message: "Please provide a valid email address"}),
+        image: z.string().url({message: "Please provide a valid URL."}).optional(),
+    })
+})

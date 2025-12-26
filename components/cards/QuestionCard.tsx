@@ -3,6 +3,7 @@ import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import TagCard from "@/components/cards/TagCard";
 import Matric from "@/components/Matric";
+import {Question, Tag} from "@/types/global";
 
 interface Props {
     question: Question;
