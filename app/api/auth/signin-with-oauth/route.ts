@@ -10,7 +10,6 @@ import Account from "@/database/account.model";
 import {NextResponse} from "next/server";
 
 
-
 export async function POST(req: Request) {
     const {provider, providerAccountId, user} = await req.json()
 
