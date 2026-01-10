@@ -24,7 +24,6 @@ function  SocialAuthForm(): JSX.Element {
                 toast("Sign-in Failed", { description: result.error });
             }
         } catch (error) {
-            console.log(error);
             toast("Sign-in Failed", {
                 description: error instanceof Error ? error.message : "An error occurred.",
             });

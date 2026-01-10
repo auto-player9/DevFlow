@@ -17,7 +17,7 @@ async function action<T>({
 }: ActionOption<T>) {
   if (schema && params) {
     try {
-
+        schema.parse(params)
     }catch (error) {
         if (error instanceof ZodError){
             return new ValidationError(error.flatten().fieldErrors as Record<string, string[]>)
@@ -35,7 +35,7 @@ async function action<T>({
     }
   }
 
-  await dbConnect()
+  await dbConnect();
   return { params , session }
 }
 

@@ -1,5 +1,3 @@
-import {NextResponse} from "next/server";
-
 interface Tag {
     _id: string,
     name: string,
@@ -26,7 +24,7 @@ interface Question {
 type ActionResponse<T = null> = {
     success: boolean;
     data?: T;
-    error?: {
+    errors?: {
         message: string;
         details: Record<string, string[]>
     };

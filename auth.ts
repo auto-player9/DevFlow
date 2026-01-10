@@ -1,66 +1,108 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import {api} from "@/lib/api";
-import {ActionResponse} from "@/types/global";
-import {IAccountDoc} from "@/database/account.model";
+import { api } from "@/lib/api";
+import { IAccountDoc } from "@/database/account.model";
+import { SignInSchema } from "./lib/validations";
+import { IUserDoc } from "./database/user.model";
+import bcrypt from "bcryptjs";
+import Credentials from "next-auth/providers/credentials";
 
 export const {
-    handlers: {GET, POST},
-    auth,
-    signIn,
-    signOut,
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
 } = NextAuth({
+  providers: [
+    GitHub({
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET,
+    }),
+    Google({
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+    }),
+    Credentials({
+      authorize: async (credentials) => {
+        const validatedFields = SignInSchema.safeParse(credentials);
 
-    providers: [
-        GitHub({
-            clientId: process.env.AUTH_GITHUB_ID,
-            clientSecret: process.env.AUTH_GITHUB_SECRET,
-        }),
-        Google({
-            clientId: process.env.AUTH_GOOGLE_ID,
-            clientSecret: process.env.AUTH_GOOGLE_SECRET,
-        }),
-    ],
-    session: {
-        strategy: "jwt",
-    },
-    callbacks: {
-        async session({session, token}) {
-            session.user.id = token.sub as string;
-            return session;
-        },
-        async jwt({token, account}) {
-            if (account) {
-                const {
-                    data: existingAccount,
-                    success
-                } = (await api.accounts.getByProvider(account.type === 'credentials' ? token.email! : account.providerAccountId)) as ActionResponse<IAccountDoc>;
-                if (!success || !existingAccount) return  token;
-                const userId = existingAccount.userId;
-                if (userId) token.sub = userId.toString();
-            }
-            return token;
-        },
-        async signIn({user, profile, account}) {
-            if (account?.type === 'credentials') return true;
-            if (!account || !user) return false;
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data;
+          const { data: existingAccount } = (await api.accounts.getByProvider(
+            email
+          )) as ActionResponse<IAccountDoc>;
+Authentication
+          if (!existingAccount) return null;
 
-            const userInfo: SignInWithOAthParams["user"] = {
-                name: user.name!,
-                email: user.email!,
-                image: user.image!,
-                username: account.provider === 'github' ? (profile?.login as string) : (user.name?.toLowerCase() as string)
+          const { data: existingUser } = (await api.users.getById(
+            existingAccount.userId.toString()
+          )) as ActionResponse<IUserDoc>;
+
+          if (!existingUser) return null;
+
+          const isValidPassword = await bcrypt.compare(
+            password,
+            existingAccount.password!
+          );
+
+          if (isValidPassword) {
+            return {
+              id: existingUser._id.toString(),
+              name: existingUser.name,
+              email: existingUser.email,
+              image: existingUser.image,
             };
-
-            const {success} = await api.auth.oAuthSignIn({
-                user: userInfo,
-                provider: account.provider as 'github' | "google",
-                providerAccountId: account.providerAccountId,
-            }) as ActionResponse;
-
-            if (!success) return false;
-            return true;
+          }
         }
+        return null;
+      },
+    }),
+  ],
+  session: {
+    strategy: "jwt",
+  },
+  callbacks: {
+    async session({ session, token }) {
+      session.user.id = token.sub as string;
+      return session;
     },
+    async jwt({ token, account }) {
+      if (account) {
+        const { data: existingAccount, success } =
+          (await api.accounts.getByProvider(
+            account.type === "credentials"
+              ? token.email!
+              : account.providerAccountId
+          )) as ActionResponse<IAccountDoc>;
+        if (!success || !existingAccount) return token;
+        const userId = existingAccount.userId;
+        if (userId) token.sub = userId.toString();
+      }
+      return token;
+    },
+    async signIn({ user, profile, account }) {
+      if (account?.type === "credentials") return true;
+      if (!account || !user) return false;
+
+      const userInfo: SignInWithOAthParams["user"] = {
+        name: user.name!,
+        email: user.email!,
+        image: user.image!,
+        username:
+          account.provider === "github"
+            ? (profile?.login as string)
+            : (user.name?.toLowerCase() as string),
+      };
+
+      const { success } = (await api.auth.oAuthSignIn({
+        user: userInfo,
+        provider: account.provider as "github" | "google",
+        providerAccountId: account.providerAccountId,
+      })) as ActionResponse;
+
+      if (!success) return false;
+      return true;
+    },
+  },
 });

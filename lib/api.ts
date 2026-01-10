@@ -2,7 +2,7 @@ import {fetchHandler} from "@/lib/handlers/fetch";
 import {IUser} from "@/database/user.model";
 import {IAccount} from "@/database/account.model";
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000/api';
+const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3001/api';
 
 export const api = {
     auth: {
@@ -37,7 +37,7 @@ export const api = {
     accounts: {
         getAll: () => fetchHandler(`${API_BASE_URL}/accounts`),
         getById: (id: string) => fetchHandler(`${API_BASE_URL}/accounts/${id}`),
-        getByProvider: (providerAccountId: string) => fetchHandler(`${API_BASE_URL}/accounts/email`,
+        getByProvider: (providerAccountId: string) => fetchHandler(`${API_BASE_URL}/accounts/provider`,
             {
                 method: 'POST',
                 body: JSON.stringify({providerAccountId}),
