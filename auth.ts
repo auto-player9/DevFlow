@@ -32,7 +32,7 @@ export const {
           const { data: existingAccount } = (await api.accounts.getByProvider(
             email
           )) as ActionResponse<IAccountDoc>;
-Authentication
+
           if (!existingAccount) return null;
 
           const { data: existingUser } = (await api.users.getById(

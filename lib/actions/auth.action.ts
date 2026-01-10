@@ -8,6 +8,7 @@ import User from "@/database/user.model";
 import bcrypt from "bcryptjs";
 import Account from "@/database/account.model";
 import { signIn } from "@/auth";
+import { NotFoundError } from "../http-errors";
 
 export async function signUpWithCredentials(
   params: AuthCredentials
@@ -64,7 +65,9 @@ export async function signUpWithCredentials(
   }
 }
 
-export async function signInWithCredentials(params: SignInCredentials) {
+export async function signInWithCredentials(
+  params: Pick<AuthCredentials , 'email' | 'password'>
+): Promise<ActionResponse> {
   const validationResult = await action({ params, schema: SignInSchema });
 
   if (validationResult instanceof Error) {
@@ -74,14 +77,26 @@ export async function signInWithCredentials(params: SignInCredentials) {
   const { email, password } = validationResult.params!;
 
   try {
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false, 
-    });
+    const existingUser = await User.findOne({ email });
+    if (!existingUser) throw new NotFoundError("User");
 
-    return { success: true, status: 200 };
-  } catch (error: any) {
+    const existingAccount = await Account.findOne({
+        provider: "credentials",
+        providerAccountId: email,
+    })
+
+    if (!existingAccount) throw new NotFoundError("Account");
+
+    const passwordMatch = await bcrypt.compare(password,existingAccount.password);
+    if (!passwordMatch) throw new Error("Password does not match")
+
+    await signIn("credentials", { email, password, redirect: false });
+
+    return { success: true, status: 200 }
+
+  } catch (error) {
     return handleError(error, "server") as ErrorResponse;
   }
 }
+
+
