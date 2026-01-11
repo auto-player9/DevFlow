@@ -1,10 +1,14 @@
-import React from "react";
+import React, { ReactElement } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import {Theme} from "./Theme";
 import MobileNavigation from "@/components/navigation/navbar/MobileNavigation";
+import { auth } from "@/auth";
+import UserAvatar from "@/components/UserAvatar";
 
-function  Navbar() : React.JSX.Element {
+async function Navbar() {
+    const session = await auth();
+
     return (
         <>
             <nav className={'flex-between w-full p-6 sm:px-12 shadow-light-300 dark:shadow-none background-light900_dark200'}>
@@ -17,6 +21,15 @@ function  Navbar() : React.JSX.Element {
                 <p>Global Search</p>
                 <div className={"flex-between gap-5"}>
                     <Theme />
+                    {
+                        session?.user?.id && (
+                            <UserAvatar 
+                                id = {session.user.id}
+                                name = {session.user.name!}
+                                imageUrl = {session.user.image!}
+                            />
+                        )
+                    }
                     <MobileNavigation />
                 </div>
             </nav>

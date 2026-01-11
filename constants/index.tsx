@@ -4,7 +4,7 @@ export const themes = [
     { value: "system", label: "System", icon: "/icons/computer.svg" },
 ];
 
-export const mobileSidebarLinks = [
+export const sidebarLinks = [
     {
         imgURL: "/icons/home.svg",
         route: "/",
@@ -42,7 +42,7 @@ export const mobileSidebarLinks = [
     },
 ];
 
-export const sidebarLinks = [
+export const mobileSidebarLinks = [
     {
         imgURL: "/icons/home.svg",
         route: "/",

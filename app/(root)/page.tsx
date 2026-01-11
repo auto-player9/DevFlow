@@ -4,7 +4,6 @@ import Link from "next/link";
 import LocaleSearch from "@/components/search/LocalSearch"
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
-import {Question} from "@/types/global";
 
 
 interface SearchParams {

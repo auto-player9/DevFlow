@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import {cn} from "@/lib/utils";
 
-function NavLinks({isMobileNav}: { isMobileNav?: boolean }) {
+function NavLinks({isMobileNav , userId}: { isMobileNav?: boolean, userId?: string }) {
     const pathname = usePathname()
     const links = isMobileNav ? mobileSidebarLinks : sidebarLinks;
 
@@ -15,6 +15,7 @@ function NavLinks({isMobileNav}: { isMobileNav?: boolean }) {
         <>
             {links.map((item) => {
                     const isActive = (pathname.includes(item.route) && item.route.length > 1) || pathname === item.route;
+                    if(item.route == '/profile') item.route += `/${userId}`
                     const LinkComponent = (
                         <Link href={item.route} key={item.label} className={cn(
                             isActive
