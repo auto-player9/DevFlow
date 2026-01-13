@@ -10,7 +10,7 @@ interface SearchParams {
     searchParams: Promise<{[key : string]:string }>
 }
 
-const questions: Question[] = [
+const questions = [
     {
         _id: "1",
         title: "How to learn react ?",
