@@ -1,16 +1,19 @@
 "use server";
 
-import Question from "@/database/question.model";
+import mongoose, { type FilterQuery } from "mongoose";
+import Question, { IQuestion, IQuestionDoc } from "@/database/question.model";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import {
     AskQuestionSchema,
     EditQuestionSchema,
     GetQuestionSchema,
+    PaginatedSearchParamsSchema,
 } from "../validations";
-import mongoose from "mongoose";
 import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
+import User from "@/database/user.model";
+
 
 
 export async function createQuestion(
@@ -48,7 +51,7 @@ export async function createQuestion(
         for (const tag of tags) {
             const existingTag = await Tag.findOneAndUpdate(
                 { name: { $regex: new RegExp(`^${tag}$`, "i") } },
-                { $setOnInsert: { name: tag }, $inc: { question: 1 } },
+                { $setOnInsert: { name: tag }, $inc: { questions: 1 } },
                 { upsert: true, new: true, session }
             );
 
@@ -83,7 +86,7 @@ export async function createQuestion(
 
 export async function editQuestion(
     params: EditQuestionParamas
-): Promise<ActionResponse<Question>> {
+): Promise<ActionResponse<IQuestionDoc>> {
     const validationResult = await action({
         params,
         schema: EditQuestionSchema,
@@ -101,7 +104,6 @@ export async function editQuestion(
     session.startTransaction();
 
     try {
-
         const question = await Question.findById(questionId).populate("tags");
 
         if (!question) throw new Error("Question not Found");
@@ -129,7 +131,7 @@ export async function editQuestion(
                     { name: { $regex: new RegExp(`^${tagName}$`, "i") } },
                     {
                         $setOnInsert: { name: tagName },
-                        $inc: { questions: 1 }, 
+                        $inc: { questions: 1 },
                     },
                     { upsert: true, new: true, session }
                 );
@@ -152,7 +154,6 @@ export async function editQuestion(
                 { $inc: { questions: -1 } },
                 { session }
             );
-
 
             await TagQuestion.deleteMany(
                 {
@@ -216,5 +217,84 @@ export async function getQuestion(
         };
     } catch (error) {
         return handleError(error, "server") as ErrorResponse;
+    }
+}
+
+export async function getQuestions(
+    params: PaginatedSearchParams
+): Promise<ActionResponse<{ questions: Question[]; isNext: boolean }>> {
+    const validationResult = await action({
+        params,
+        schema: PaginatedSearchParamsSchema,
+    });
+
+    if (validationResult instanceof Error) {
+        return handleError(validationResult, "server") as ErrorResponse;
+    }
+
+    const { page = 1, pageSize = 10, query, filter } = params;
+
+    const skip = (Number(page) - 1) * pageSize;
+    const limit = Number(pageSize);
+
+    const filterQuery: FilterQuery<typeof Question> = {};
+
+    if (filter === "recommended")
+        return {
+            status: 200,
+            success: true,
+            data: { questions: [], isNext: false },
+        };
+
+    if (query) {
+        filterQuery.$or = [
+            { title: { $regex: new RegExp(query, "i") } },
+            { content: { $regex: new RegExp(query, "i") } },
+        ];
+    }
+
+    let sortCritiria = {};
+
+    switch (filter) {
+        case "newest":
+            sortCritiria = { createdAt: -1 };
+            break;
+        case "unanswerd":
+            filterQuery.answers = 0;
+            sortCritiria = { createdAt: -1 };
+            break;
+        case "popular":
+            sortCritiria = { upvotes: -1 };
+            break;
+        default:
+            sortCritiria = { createdAt: -1 };
+            break;
+    }
+
+    try {
+        const totalQuestions = await Question.countDocuments(filterQuery);
+
+        const questions = await Question.find(filterQuery)
+            .populate("tags", "name")
+            .populate({
+                path: "author",
+                model: User,
+                select: "name image"
+            })
+            .lean()
+            .sort(sortCritiria)
+            .skip(skip)
+            .limit(limit);
+
+        const isNext = totalQuestions > skip + questions.length;
+
+        return {
+            status: 200,
+            success: true,
+            data: { questions: JSON.parse(JSON.stringify(questions)), isNext },
+        }
+
+    } catch (error) {
+        return handleError(error, 'server') as ErrorResponse;
     }
 }

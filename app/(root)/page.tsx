@@ -4,73 +4,28 @@ import Link from "next/link";
 import LocaleSearch from "@/components/search/LocalSearch"
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
+import { getQuestions } from "@/lib/actions/question.action";
+
 
 
 interface SearchParams {
     searchParams: Promise<{[key : string]:string }>
 }
 
-const questions = [
-    {
-        _id: "1",
-        title: "How to learn react ?",
-        description: "I want to learn react , can anyone help me ?",
-        tags: [
-            {
-                _id : "1",
-                name : "React"
-            },
-            {
-                _id : "2",
-                name : "Javascript"
-            }
-        ],
-        author: {
-            _id : "1",
-            name : "User1",
-            image : "https://tse1.mm.bing.net/th/id/OIF.EoCwNwPtErxbfM3F5q2H3w?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3"
-        },
-        createdAt: new Date("2024-3-2"),
-        upvotes: 10,
-        answers: 2,
-        views: 30,
-
-    },
-    {
-        _id: "2",
-        title: "How to learn react ?",
-        description: "I want to learn react , can anyone help me ?",
-        tags: [
-            {
-                _id : "1",
-                name : "Javascript"
-            },
-            {
-                _id : "2",
-                name : "Javascript"
-            }
-        ],
-        author: {
-            _id : "2",
-            name : "User2",
-            image : "https://tse1.mm.bing.net/th/id/OIF.EoCwNwPtErxbfM3F5q2H3w?cb=ucfimg2&ucfimg=1&rs=1&pid=ImgDetMain&o=7&rm=3"
-        },
-        createdAt: new Date("2025-3-2"),
-        upvotes: 10,
-        answers: 2,
-        views: 30,
-
-    }
-]
 
 export default async function Home({searchParams} : SearchParams) {
+    const { page, pageSize, query, filter} = await searchParams;
 
-    const {query ='' , filter = ''} = await searchParams;
-    const filteredQuestions = questions.filter(question => {
-        const matchQuery =  question.title.toLowerCase().includes(query.toLowerCase());
-        const matchFilter = filter ? question.tags[0].name.toLowerCase(): true
-        return matchQuery && matchFilter;
-    })
+    const { success, data, errors } = await getQuestions({
+        page: Number(page) || 1,
+        pageSize: Number(pageSize) || 10,
+        query: query || "",
+        filter: filter || "",
+
+    });
+
+    const { questions } = data || {};
+
 
 
     return (
@@ -86,12 +41,24 @@ export default async function Home({searchParams} : SearchParams) {
                 <LocaleSearch route="/" imgSrc="/icons/search.svg" placeholder= "Search questions..." otherClasses = "flex-1"/>
             </section>
             <HomeFilter />
-
-            <div className="mt-10 flex w-full flex-col gap-6">
-                {filteredQuestions.map((question) => (
+            {success ? (
+                <div className="mt-10 flex w-full flex-col gap-6">
+                {questions && questions.length > 0 ? (
+                questions.map((question) => (
                     <QuestionCard key={question._id} question={question} />
-                ))}
+                ))
+                ) : (
+                    <div className="mt-10 flex w-full items-center justify-center">
+                        <p className="text-dark400_light700">No questions found</p>
+                    </div>
+                )}
             </div>
+            ): (
+                <div className="mt-10 flex w-full items-center justify-center">
+                        <p className="text-dark400_light700">{errors?.message || "Failed to fetch questions"}</p>
+                    </div>
+            )}
+            
         </>
     );
 }

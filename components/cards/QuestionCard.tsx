@@ -1,27 +1,26 @@
-import {getTimeStamp} from "@/lib/utils";
+import { getTimeStamp } from "@/lib/utils";
 import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import TagCard from "@/components/cards/TagCard";
-import Matric from "@/components/Matric";
-import {Question, Tag} from "@/types/global";
+import Matric from "../Matric";
 
 interface Props {
     question: Question;
 }
 
 export default function QuestionCard({
-                                         question: {
-                                             _id,
-                                             title,
-                                             description,
-                                             tags,
-                                             author,
-                                             createdAt,
-                                             upvotes,
-                                             answers,
-                                             views
-                                         }
-                                     }:Props) {
+    question: {
+        _id,
+        title,
+        description,
+        tags,
+        author,
+        createdAt,
+        upvotes,
+        answers,
+        views
+    }
+}: Props) {
     return (
         <>
             <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
@@ -37,17 +36,17 @@ export default function QuestionCard({
                 </div>
                 <div className="mt-3.5 flex w-full flex-wrap gap-2">
                     {
-                        tags.map((tag:Tag) => (
+                        tags.map((tag: Tag) => (
                             <TagCard key={tag._id} _id={tag._id} name={tag.name} compact isButton={false} />
                         ))
                     }
                 </div>
                 <div className="flex-between mt-6 w-full flex-wrap gap-3">
-                    <Matric href={ROUTES.PROFILE(author._id)} imgUrl={author.image}  alt={author.name}
-                            value={author.name}  title={`asked ${getTimeStamp(createdAt)}`}
-                            textStyles="body-medium text-dark400_light700"
-                            isAuthor
-                            imgStyles={""}
+                    <Matric href={ROUTES.PROFILE(author._id)} imgUrl={author.image} alt={author.name}
+                        value={author.name} title={`asked ${getTimeStamp(createdAt)}`}
+                        textStyles="body-medium text-dark400_light700"
+                        isAuthor
+                        imgStyles={""}
                     />
                     <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">
                         <Matric imgStyles={""} imgUrl={"/icons/like.svg"} alt="like" value={upvotes} title=" Votes" textStyles="small-medium text-dark400_light800" />

@@ -12,6 +12,8 @@ export interface IQuestion {
     author: Types.ObjectId;
 }
 
+export interface IQuestionDoc extends IQuestion, Document {}
+
 const QuestionSchema = new Schema<IQuestion>({
     title: {type: String, required: true},
     content: {type: String, required: true},
@@ -20,7 +22,7 @@ const QuestionSchema = new Schema<IQuestion>({
     upvotes: {type: Number, default: 0},
     downvotes: {type: Number, default: 0},
     answers: {type: Number, default: 0},
-    author: {type: Schema.Types.ObjectId, ref: "Author"}
+    author: {type: Schema.Types.ObjectId, ref: "User"}
 }, { timestamps: true });
 
 const Question = models?.Question || model<IQuestion>('Question', QuestionSchema);
