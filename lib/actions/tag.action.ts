@@ -1,9 +1,9 @@
 import { boolean } from "zod";
 import action from "../handlers/action";
-import { PaginatedSearchParamsSchema } from "../validations";
+import { GetQuestionSchema, GetTagQuestionsSchema, PaginatedSearchParamsSchema } from "../validations";
 import handleError from "../handlers/error";
 import { FilterQuery } from "mongoose";
-import { Tag } from "@/database";
+import { Question, Tag } from "@/database";
 import { LinkBreak1Icon } from "@radix-ui/react-icons";
 
 export async function getTags(params: PaginatedSearchParams): Promise<ActionResponse<{ tags: Tag[]; isNext: boolean }>> {
@@ -72,3 +72,60 @@ export async function getTags(params: PaginatedSearchParams): Promise<ActionResp
 
 }
 
+
+export async function GetTagQuestions(params: GetTagQuestionsParams): Promise<ActionResponse<{ tag: Tag; questions: Question[]; isNext: boolean }>> {
+    const validationResult = await action({ params, schema: GetTagQuestionsSchema } as any);
+
+    if (validationResult instanceof Error) {
+        return handleError(validationResult, 'server') as ErrorResponse;
+    }
+
+    const { tagId, page = 1, pageSize = 10, query } = params;
+
+    const skip = (Number(page) - 1) * pageSize;
+    const limit = Number(pageSize);
+
+
+    try {
+        const tag = await Tag.findById(tagId);
+        if (!tag) throw new Error("Tag not found");
+
+
+        const filterQuery: FilterQuery<typeof Question> = {
+            tags: { $in: [tagId] }
+        };
+
+        if (query) {
+            filterQuery.title = [
+                { $regex: query, $options: "i" },
+            ]
+        }
+
+        const totalQuestions = await Question.countDocuments(filterQuery);
+
+        const questions = await Question.find(filterQuery)
+        .select('_id title views answers upvotes downvotes author createdAt')
+        .populate([
+            { path: 'author', select: "name image"},
+            { path: "tags", select: "name"}
+        ])
+            .skip(skip)
+            .limit(limit)
+
+        const isNext = totalQuestions > skip + questions.length;
+
+        return {
+            status: 200,
+            success: true,
+            data: {
+                tag: JSON.parse(JSON.stringify(tag)),
+                questions: JSON.parse(JSON.stringify(questions)),
+                isNext: isNext
+            }
+        };
+
+    } catch (error) {
+        return handleError(error, 'server') as ErrorResponse;
+    }
+
+}
