@@ -1,6 +1,6 @@
 "use server";
 
-import mongoose, { type FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 import Question, { IQuestion, IQuestionDoc } from "@/database/question.model";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
@@ -13,6 +13,7 @@ import {
 import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
 import User from "@/database/user.model";
+import { FilterOperations } from "mongodb";
 
 
 
@@ -86,7 +87,7 @@ export async function createQuestion(
 
 export async function editQuestion(
     params: EditQuestionParamas
-): Promise<ActionResponse<IQuestionDoc>> {
+): Promise<ActionResponse<Question>> {
     const validationResult = await action({
         params,
         schema: EditQuestionSchema,
@@ -237,7 +238,7 @@ export async function getQuestions(
     const skip = (Number(page) - 1) * pageSize;
     const limit = Number(pageSize);
 
-    const filterQuery: FilterQuery<typeof Question> = {};
+    const filterQuery: FilterQuery = {};
 
     if (filter === "recommended")
         return {

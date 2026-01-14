@@ -1,20 +1,21 @@
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import ROUTES from "@/constants/routes"
 import Link from "next/link";
 import LocaleSearch from "@/components/search/LocalSearch"
 import HomeFilter from "@/components/filters/HomeFilter";
 import QuestionCard from "@/components/cards/QuestionCard";
 import { getQuestions } from "@/lib/actions/question.action";
-
+import DataRenderer from "@/components/DataRender";
+import { EMPTY_QUESTION } from "@/constants/states";
 
 
 interface SearchParams {
-    searchParams: Promise<{[key : string]:string }>
+    searchParams: Promise<{ [key: string]: string }>
 }
 
 
-export default async function Home({searchParams} : SearchParams) {
-    const { page, pageSize, query, filter} = await searchParams;
+export default async function Home({ searchParams }: SearchParams) {
+    const { page, pageSize, query, filter } = await searchParams;
 
     const { success, data, errors } = await getQuestions({
         page: Number(page) || 1,
@@ -38,26 +39,14 @@ export default async function Home({searchParams} : SearchParams) {
             </section>
 
             <section className="mt-11">
-                <LocaleSearch route="/" imgSrc="/icons/search.svg" placeholder= "Search questions..." otherClasses = "flex-1"/>
+                <LocaleSearch route="/" imgSrc="/icons/search.svg" placeholder="Search questions..." otherClasses="flex-1" />
             </section>
             <HomeFilter />
-            {success ? (
-                <div className="mt-10 flex w-full flex-col gap-6">
-                {questions && questions.length > 0 ? (
+            <DataRenderer success={success} errors={errors} data={questions} empty={EMPTY_QUESTION} render={(questions: Question[]) => (
                 questions.map((question) => (
                     <QuestionCard key={question._id} question={question} />
                 ))
-                ) : (
-                    <div className="mt-10 flex w-full items-center justify-center">
-                        <p className="text-dark400_light700">No questions found</p>
-                    </div>
-                )}
-            </div>
-            ): (
-                <div className="mt-10 flex w-full items-center justify-center">
-                        <p className="text-dark400_light700">{errors?.message || "Failed to fetch questions"}</p>
-                    </div>
-            )}
+            )} />           
             
         </>
     );
