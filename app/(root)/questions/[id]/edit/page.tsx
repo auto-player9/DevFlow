@@ -6,6 +6,7 @@ import { notFound, redirect } from "next/navigation";
 
 export default async function EditQuestion({ params }: RouteParams) {
     const { id } = await params;
+
     if (!id) return notFound();
 
     const session = await auth();
