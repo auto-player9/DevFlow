@@ -5,6 +5,7 @@ import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
 import { getQuestion } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
+import {View} from "../view";
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -21,6 +22,7 @@ export default async function QuestionDetails({ params }: RouteParams) {
 
     return (
         <>
+        <View questionId={id} />
             <div className="flex-start w-full flex-col">
                 <div className="flex w-full flex-col-reverse justify-between">
                     <div className="flex items-center justify-start gap-1">

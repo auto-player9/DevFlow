@@ -8,12 +8,15 @@ import {
     AskQuestionSchema,
     EditQuestionSchema,
     GetQuestionSchema,
+    IncrementViewsSchema,
     PaginatedSearchParamsSchema,
 } from "../validations";
 import Tag, { ITagDoc } from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
 import User from "@/database/user.model";
-import { FilterOperations } from "mongodb";
+import { revalidatePath } from "next/cache";
+import ROUTES from "@/constants/routes";
+
 
 
 
@@ -300,5 +303,39 @@ export async function getQuestions(
 
     } catch (error) {
         return handleError(error, 'server') as ErrorResponse;
+    }
+}
+
+
+export async function incrementViews(params: IncrementViewsParams): Promise<ActionResponse<{ views: number }>> {
+    const validationResult = await action({
+        params, schema: IncrementViewsSchema,
+    })
+
+    if (validationResult instanceof Error) {
+        return handleError(validationResult, "server") as ErrorResponse
+    }
+
+    const { questionId } = validationResult.params!;
+
+    try {
+        const question = await Question.findById(questionId);
+        if(!question) {
+            throw new Error("Question not found")
+        }
+
+        question.views +=1;
+
+        await question.save();
+
+        revalidatePath(ROUTES.QUESTION(questionId))
+
+        return {
+            status: 200,
+            success: true,
+            data: { views: question.views },
+        }
+    }catch (error) {
+         return handleError(validationResult, "server") as ErrorResponse
     }
 }
