@@ -13,16 +13,19 @@ import {
 } from "@/components/ui/form";
 import ROUTES from "@/constants/routes";
 import { AnswerSchema } from "@/lib/validations";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { MDXEditorMethods } from "@mdxeditor/editor";
 import Editor from "../editor";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
+import { create } from "domain";
+import { createAnswer } from "@/lib/actions/answer.action";
+import { toast } from "sonner";
 
-export default function AnswerForm() {
+export default function AnswerForm({ questionId }: { questionId: string }) {
 
-    const [isSubmitting, setSubmitting] = useState(false);
+    const [isAnswering, startAnsweringTransition] = useTransition();
     const [isAISubmitting, setIsAISubmitting] = useState(false);
 
     const editorRef = useRef<MDXEditorMethods>(null);
@@ -35,7 +38,24 @@ export default function AnswerForm() {
     })
 
     const handleSubmit = async (values: z.infer<typeof AnswerSchema>) => {
-        console.log(values)
+        startAnsweringTransition(async () => {
+            const resutl = await createAnswer({
+                questionId,
+                content: values.content
+            })
+            if (resutl.success) {
+                form.reset();
+                toast.success(
+                    'Success',
+                    {
+                        description: "Success"
+                    })
+            } else {
+                toast.error('Error', {
+                    description: resutl.errors?.message
+                })
+            }
+        })
     }
     return (
         <div>
@@ -73,7 +93,7 @@ export default function AnswerForm() {
                     />
                     <div className="flex justify-end">
                         <Button type="submit" className="primary-gradient w-fit">
-                            {isSubmitting ? <>
+                            {isAnswering ? <>
                                 <ReloadIcon className="mr-2 size-4 animate-spin" />
                                 Posting...
                             </> : "Post Answer"}
