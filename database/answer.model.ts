@@ -9,7 +9,7 @@ export interface IAnswer {
 }
 
 const AnswerSchema = new Schema<IAnswer>({
-    author: {type: Schema.Types.ObjectId, ref: 'Author', required: true},
+    author: {type: Schema.Types.ObjectId, ref: 'User', required: true},
     question: {type: Schema.Types.ObjectId, ref: 'Question', required: true},
     content: {type: String, required: true},
     upvotes: {type: Number, default: 0},

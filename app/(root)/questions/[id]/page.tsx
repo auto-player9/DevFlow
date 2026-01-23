@@ -4,6 +4,7 @@ import AnswerForm from "@/components/forms/AnswerForm";
 import Matric from "@/components/Matric";
 import UserAvatar from "@/components/UserAvatar";
 import ROUTES from "@/constants/routes";
+import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 
@@ -26,6 +27,15 @@ export default async function QuestionDetails({ params }: RouteParams) {
 
 
     if (!success || !question) return redirect("/404");
+
+    const { success: areAnswersLoaded, data: answersResult, errors: answersError } = await getAnswers({ 
+        questionId: id,
+        page: 1,
+        pageSize: 10,
+        filter: 'latest'
+    })
+
+    console.log('ANSWERS', answersResult)
 
     const { author, createdAt, answers, views, tags, title, content } = question;
 
