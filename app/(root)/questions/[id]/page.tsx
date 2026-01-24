@@ -1,8 +1,10 @@
+import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
 import Matric from "@/components/Matric";
 import UserAvatar from "@/components/UserAvatar";
+import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
@@ -28,14 +30,12 @@ export default async function QuestionDetails({ params }: RouteParams) {
 
     if (!success || !question) return redirect("/404");
 
-    const { success: areAnswersLoaded, data: answersResult, errors: answersError } = await getAnswers({ 
+    const { success: areAnswersLoaded, data: answersResult, errors: answersError } = await getAnswers({
         questionId: id,
         page: 1,
         pageSize: 10,
         filter: 'latest'
     })
-
-    console.log('ANSWERS', answersResult)
 
     const { author, createdAt, answers, views, tags, title, content } = question;
 
@@ -53,7 +53,7 @@ export default async function QuestionDetails({ params }: RouteParams) {
                         </Link>
                     </div>
                     <div className="flex justify-end">
-                        <p>Vote</p>
+                        <Votes upvotes={question.upvotes} hasupVoted={true} downvotes={question.downvotes} hasdownVoted={false} />
                     </div>
                 </div>
                 <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
@@ -99,9 +99,18 @@ export default async function QuestionDetails({ params }: RouteParams) {
                 }
             </div>
 
-                <section className="my-5">
-                    <AnswerForm questionId={question._id} />
-                </section>
+            <section className="my-5">
+                <AllAnswers
+                    data={answersResult?.answers}
+                    success={areAnswersLoaded}
+                    errors={answersError}
+                    totalAnswers={answersResult?.totalAnswers || 0}
+                />
+            </section>
+
+            <section className="my-5">
+                <AnswerForm questionId={question._id} />
+            </section>
 
         </>
     )
