@@ -8,12 +8,14 @@ import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
+import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
 
 
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
+import { Suspense } from "react";
 
 export default async function QuestionDetails({ params }: RouteParams) {
     const { id } = await params;
@@ -37,6 +39,11 @@ export default async function QuestionDetails({ params }: RouteParams) {
         filter: 'latest'
     })
 
+    const hasVotedPromise = hasVoted({
+        targetId: question._id,
+        targetType: "question"
+    })
+
     const { author, createdAt, answers, views, tags, title, content } = question;
 
     return (
@@ -53,7 +60,15 @@ export default async function QuestionDetails({ params }: RouteParams) {
                         </Link>
                     </div>
                     <div className="flex justify-end">
-                        <Votes upvotes={question.upvotes} hasupVoted={true} downvotes={question.downvotes} hasdownVoted={false} />
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Votes
+                                upvotes={question.upvotes}
+                                downvotes={question.downvotes}
+                                targetType="question"
+                                targetId={question._id}
+                                hasVotedPromise={hasVotedPromise}
+                            />
+                        </Suspense>
                     </div>
                 </div>
                 <h2 className="h2-semibold text-dark200_light900 mt-3.5 w-full">
