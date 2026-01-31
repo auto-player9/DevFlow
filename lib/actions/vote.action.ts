@@ -3,6 +3,7 @@
 import mongoose, { ClientSession } from "mongoose";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
+import { FilterQuery } from "mongoose";
 import { CreateVoteSchema, UpdateVoteCountSchema, HasVotedSchema } from "../validations";
 import { Answer, Question, Vote } from "@/database";
 import { revalidatePath } from "next/cache";
@@ -63,7 +64,7 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
 
     const userId = validationResult.session?.user?.id;
 
-    if (userId) return  handleError(new Error("Unauthorized"), 'server') as ErrorResponse
+    if (!userId) return  handleError(new Error("Unauthorized"), 'server') as ErrorResponse
 
     const session = await mongoose.startSession()
     session.startTransaction();

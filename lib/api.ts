@@ -2,7 +2,7 @@ import {fetchHandler} from "@/lib/handlers/fetch";
 import {IUser} from "@/database/user.model";
 import {IAccount} from "@/database/account.model";
 
-const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3001/api';
+const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:3000/api';
 
 export const api = {
     auth: {
