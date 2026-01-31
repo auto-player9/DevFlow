@@ -1,10 +1,10 @@
 'use client'
 
-import {Input} from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import {usePathname, useSearchParams, useRouter} from "next/navigation";
-import {useEffect, useState} from "react";
-import {formUrlQuery, removeKeysFromUrlQuery} from "@/lib/url";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { formUrlQuery, removeKeysFromUrlQuery } from "@/lib/url";
 
 interface Props {
     route: string;
@@ -15,7 +15,7 @@ interface Props {
 
 }
 
-function LocalSearch({route, imgSrc, placeholder, otherClasses, iconPosition = "left"}: Props) {
+function LocalSearch({ route, imgSrc, placeholder, otherClasses, iconPosition = "left" }: Props) {
     const pathname = usePathname();
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -32,7 +32,7 @@ function LocalSearch({route, imgSrc, placeholder, otherClasses, iconPosition = "
                     value: searchQuery,
                 })
 
-                router.push(newUrl, {scroll: false});
+                router.push(newUrl, { scroll: false });
             } else {
                 if (pathname === route) {
                     const newUrl = removeKeysFromUrlQuery({
@@ -40,7 +40,7 @@ function LocalSearch({route, imgSrc, placeholder, otherClasses, iconPosition = "
                         keysToRemove: ["query"],
                     });
 
-                    router.push(newUrl, {scroll: false});
+                    router.push(newUrl, { scroll: false });
                 }
             }
 
@@ -55,13 +55,13 @@ function LocalSearch({route, imgSrc, placeholder, otherClasses, iconPosition = "
             <div
                 className="background-light800_darkgradient flex min-h-[56px] grow items-center gap-4 rounded-[10px] px-4">
                 {iconPosition === "left" && (
-                    <Image src={imgSrc} width={24} height={24} alt="Serach" className="cursor-pointer"/>
+                    <Image src={imgSrc} width={24} height={24} alt="Serach" className="cursor-pointer" />
                 )}
-                <Input type="text" placeholder={placeholder? placeholder : "Search..."} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
-                       className="paragraph-regular no-focus placeholder text-dark400_light700 border-none shadow-none outline-none"
+                <Input type="text" placeholder={placeholder ? placeholder : "Search..."} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}
+                    className="paragraph-regular no-focus placeholder text-dark400_light700 border-none shadow-none outline-none flex-1"
                 />
                 {iconPosition === "right" && (
-                    <Image src={imgSrc} width={24} height={24} alt="Serach" className="cursor-pointer"/>
+                    <Image src={imgSrc} width={24} height={24} alt="Serach" className="cursor-pointer" />
                 )}
             </div>
         </>

@@ -58,3 +58,4 @@ export const EMPTY_USERS = {
   title: "No Users Found",
   message: "You're ALONE. The only one here. More uses are coming soon!",
 };
+
