@@ -14,11 +14,11 @@ interface Question {
     title: string;
     content: string;
     description: string;
-    tags: Tag[]; 
+    tags: Tag[];
     author: Author;
     createdAt: Date;
     upvotes: number;
-    downvotes
+    downvotes: number;
     answers: number;
     views: number;
 }
@@ -32,8 +32,8 @@ type ActionResponse<T = null> = {
     };
     status?: number;
 }
-type SuccessResponse<T = null> = ActionResponse<T> & {success: true};
-type ErrorResponse = ActionResponse<undefined> & {success: false};
+type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+type ErrorResponse = ActionResponse<undefined> & { success: false };
 type APIErrorResponse = NextResponse<ErrorResponse>;
 type APIResponse<T = null> = NextResponse<SuccessResponse<T>> | APIErrorResponse;
 
@@ -55,5 +55,7 @@ interface Answer {
     _id: string;
     author: Author;
     content: string;
-    createdAt: Date; 
+    upvotes: number;
+    downvotes: number;
+    createdAt: Date;
 } 

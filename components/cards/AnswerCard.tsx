@@ -3,10 +3,16 @@ import UserAvatar from "../UserAvatar";
 import ROUTES from "@/constants/routes";
 import { getTimeStamp } from "@/lib/utils";
 import Preview from "../editor/Preview";
-import { Question } from "@/database";
 import Votes from "../votes/Votes";
+import { Suspense } from "react";
+import { hasVoted } from "@/lib/actions/vote.action";
 
-export default function AnswerCard({ _id, author, content, createdAt }: Answer) {
+export default function AnswerCard({ _id, author, content, createdAt, upvotes, downvotes }: Answer) {
+    const hasVotedPromise = hasVoted({
+        targetId: _id,
+        targetType: "answer"
+    })
+
     return (
         <article className="light-border border-b py-10">
             <span id={JSON.stringify(_id)} className="hash-span" />
@@ -32,7 +38,15 @@ export default function AnswerCard({ _id, author, content, createdAt }: Answer) 
                     </Link>
                 </div>
                 <div className="flex justify-end">
-                   
+                    <Suspense fallback={<div>Loading...</div>}>
+                        <Votes
+                            upvotes={upvotes}
+                            downvotes={downvotes}
+                            targetType="answer"
+                            targetId={_id}
+                            hasVotedPromise={hasVotedPromise}
+                        />
+                    </Suspense>
                 </div>
             </div>
 
