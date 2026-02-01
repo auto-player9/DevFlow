@@ -3,10 +3,12 @@ import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
 import Matric from "@/components/Matric";
+import SaveQuestion from "@/components/questions/SaveQuestion";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import { getAnswers } from "@/lib/actions/answer.action";
+import { hasSavedQuestion } from "@/lib/actions/collection.action";
 import { getQuestion, incrementViews } from "@/lib/actions/question.action";
 import { hasVoted } from "@/lib/actions/vote.action";
 import { formatNumber, getTimeStamp } from "@/lib/utils";
@@ -44,6 +46,10 @@ export default async function QuestionDetails({ params }: RouteParams) {
         targetType: "question"
     })
 
+    const hasSavedQuestionPromise = hasSavedQuestion({
+        questionId: question._id
+    })
+
     const { author, createdAt, answers, views, tags, title, content } = question;
 
     return (
@@ -59,7 +65,7 @@ export default async function QuestionDetails({ params }: RouteParams) {
                             </p>
                         </Link>
                     </div>
-                    <div className="flex justify-end">
+                    <div className="flex justify-end itmes-center gap-4">
                         <Suspense fallback={<div>Loading...</div>}>
                             <Votes
                                 upvotes={question.upvotes}
@@ -68,6 +74,9 @@ export default async function QuestionDetails({ params }: RouteParams) {
                                 targetId={question._id}
                                 hasVotedPromise={hasVotedPromise}
                             />
+                        </Suspense>
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <SaveQuestion questionId={question._id} hasSavedQuestionPromise={hasSavedQuestionPromise} />
                         </Suspense>
                     </div>
                 </div>
