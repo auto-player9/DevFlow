@@ -16,6 +16,8 @@ import TagQuestion from "@/database/tag-question.model";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
+import { Db } from "mongodb";
+import dbConnect from "../mongoose";
 
 
 
@@ -209,9 +211,9 @@ export async function getQuestion(
 
     try {
         const question = await Question.findById(questionId)
-        .populate("tags")
-        .populate("author", "_id name image")
-        ;
+            .populate("tags")
+            .populate("author", "_id name image")
+            ;
 
         if (!question) {
             throw new Error("Question not found");
@@ -266,8 +268,8 @@ export async function getQuestions(
         case "newest":
             sortCritiria = { createdAt: -1 };
             break;
-        case "unanswerd":
-            filterQuery.answers = 0;
+        case "unanswered":
+            filterQuery.answers = 0;;
             sortCritiria = { createdAt: -1 };
             break;
         case "popular":
@@ -320,11 +322,11 @@ export async function incrementViews(params: IncrementViewsParams): Promise<Acti
 
     try {
         const question = await Question.findById(questionId);
-        if(!question) {
+        if (!question) {
             throw new Error("Question not found")
         }
 
-        question.views +=1;
+        question.views += 1;
 
         await question.save();
 
@@ -335,7 +337,25 @@ export async function incrementViews(params: IncrementViewsParams): Promise<Acti
             success: true,
             data: { views: question.views },
         }
-    }catch (error) {
-         return handleError(validationResult, "server") as ErrorResponse
+    } catch (error) {
+        return handleError(validationResult, "server") as ErrorResponse
+    }
+}
+
+export async function getHotQuestions(): Promise<ActionResponse<Question[]>> {
+    try {
+        await dbConnect();
+
+        const questions = await Question.find()
+            .sort({ views: -1, upvotes: -1 })
+            .limit(5);
+
+        return {
+            success: true,
+            data: JSON.parse(JSON.stringify(questions)),
+        }
+
+    } catch (error) {
+        return handleError(error, 'server') as ErrorResponse;
     }
 }

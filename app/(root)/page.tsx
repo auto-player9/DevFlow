@@ -9,6 +9,7 @@ import DataRenderer from "@/components/DataRender";
 import { EMPTY_QUESTION } from "@/constants/states";
 import CommonFilter from "@/components/filters/CommonFilter";
 import { HomePageFilters } from "@/constants/filter";
+import Pagination from "@/components/Pagination";
 
 
 interface SearchParams {
@@ -27,7 +28,7 @@ export default async function Home({ searchParams }: SearchParams) {
 
     });
 
-    const { questions } = data || {};
+    const { questions , isNext} = data || {};
 
 
 
@@ -42,9 +43,9 @@ export default async function Home({ searchParams }: SearchParams) {
 
             <section className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
                 <LocaleSearch route="/" imgSrc="/icons/search.svg" placeholder="Search questions..." otherClasses="flex-1" />
-                <CommonFilter 
+                <CommonFilter
                     filters={HomePageFilters}
-                    otherClasses="max-h-[56px] sm:min-w-[170px]" 
+                    otherClasses="max-h-[56px] sm:min-w-[170px]"
                     containerClasses="hidden max-md:flex"
                 />
             </section>
@@ -53,8 +54,9 @@ export default async function Home({ searchParams }: SearchParams) {
                 questions.map((question) => (
                     <QuestionCard key={question._id} question={question} />
                 ))
-            )} />           
-            
+            )} />
+
+            <Pagination page={page} isNext={isNext || false} />
         </>
     );
 }
