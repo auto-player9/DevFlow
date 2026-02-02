@@ -1,7 +1,7 @@
 "use server";
 
 import mongoose, { FilterQuery } from "mongoose";
-import Question, { IQuestion, IQuestionDoc } from "@/database/question.model";
+import Question from "@/database/question.model";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import {
