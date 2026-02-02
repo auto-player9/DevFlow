@@ -109,7 +109,7 @@ export async function getSavedQuestion(params: PaginatedSearchParams): Promise<A
         return handleError(validationResult, 'server') as ErrorResponse;
     }
 
-    const { page = 1, pageSize = 10, filter , query } = validationResult.params!;
+    const { page = 1, pageSize = 10, filter, query } = validationResult.params!;
     const skip = (page - 1) * pageSize;
     const limit = pageSize;
     const userId = validationResult.session?.user?.id;
@@ -125,17 +125,17 @@ export async function getSavedQuestion(params: PaginatedSearchParams): Promise<A
     const sortCriteria = sortOptions[filter as keyof typeof sortOptions] || { "question.createdAt": -1 };
 
     try {
-        const pipline: PipelineStage[] = [
+        const pipeline: PipelineStage[] = [
             { $match: { author: new mongoose.Types.ObjectId(userId) } },
-            { $lookup: { from: "users", localField: "question.author", foreignField: "_id", as: "question.author" } },
-            { $unwind: "$question.author" },
             { $lookup: { from: "questions", localField: "question", foreignField: "_id", as: "question" } },
             { $unwind: "$question" },
+            { $lookup: { from: "users", localField: "question.author", foreignField: "_id", as: "question.author" } },
+            { $unwind: "$question.author" },
             { $lookup: { from: "tags", localField: "question.tags", foreignField: "_id", as: "question.tags" } },
         ];
 
-        if(query) {
-            pipline.push({
+        if (query) {
+            pipeline.push({
                 $match: {
                     $or: [
                         { "question.title": { $regex: query, $options: "i" } },
@@ -145,28 +145,23 @@ export async function getSavedQuestion(params: PaginatedSearchParams): Promise<A
             })
         }
 
-        const [totalCount] = await Collection.aggregate([
-            ...pipline,
+        const [totalCountResult] = await Collection.aggregate([
+            ...pipeline,
             { $count: "count" }
         ]);
+        const totalCount = totalCountResult?.count || 0;
 
-        pipline.push(
+        pipeline.push(
             { $sort: sortCriteria },
             { $skip: skip },
             { $limit: limit },
-        );;
-
-        pipline.push(
-            {
-                $project: {
-                    question: 1,
-                    author: 1
-                }
-            }
+            { $project: { question: 1, author: 1 } }
         );
 
-        const questions = await Collection.aggregate(pipline);
-        const isNext = totalCount ? totalCount.count > skip + questions.length : false;
+        const questions = await Collection.aggregate(pipeline);
+        
+        const isNext = totalCount > skip + questions.length;
+
         return {
             status: 200,
             success: true,
@@ -176,5 +171,4 @@ export async function getSavedQuestion(params: PaginatedSearchParams): Promise<A
     } catch (error) {
         return handleError(error, 'server') as ErrorResponse;
     }
-
 }

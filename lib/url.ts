@@ -15,9 +15,6 @@ export function formUrlQuery ({params, key, value}: UrlQueryParams) {
     const queryString = qs.parse(params);
 
     queryString[key] = value;
-
-    console.log(qs.stringify(queryString));
-
     return `${window.location.pathname}?${qs.stringify(queryString)}`;
 }
 

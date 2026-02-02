@@ -7,6 +7,8 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import { getQuestions } from "@/lib/actions/question.action";
 import DataRenderer from "@/components/DataRender";
 import { EMPTY_QUESTION } from "@/constants/states";
+import CommonFilter from "@/components/filters/CommonFilter";
+import { HomePageFilters } from "@/constants/filter";
 
 
 interface SearchParams {
@@ -38,8 +40,13 @@ export default async function Home({ searchParams }: SearchParams) {
                 </Button>
             </section>
 
-            <section className="mt-11">
+            <section className="mt-11 flex justify-between gap-5 max-sm:flex-col sm:items-center">
                 <LocaleSearch route="/" imgSrc="/icons/search.svg" placeholder="Search questions..." otherClasses="flex-1" />
+                <CommonFilter 
+                    filters={HomePageFilters}
+                    otherClasses="max-h-[56px] sm:min-w-[170px]" 
+                    containerClasses="hidden max-md:flex"
+                />
             </section>
             <HomeFilter />
             <DataRenderer success={success} errors={errors} data={questions} empty={EMPTY_QUESTION} render={(questions: Question[]) => (
