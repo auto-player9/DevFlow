@@ -1,3 +1,4 @@
+
 interface Tag {
     _id: string,
     name: string,
@@ -71,6 +72,7 @@ interface User {
     location?: string;
     portfolio?: string
     reputation?: number;
+    createdAt: Date
 }
 
 interface Collection {
