@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { getQuestion, getQuestionsByTags } from "./actions/question.action";
 
 const ObjectIdRegex = /^[0-9a-fA-F]{24}$/;
 
@@ -114,7 +115,7 @@ export const PaginatedSearchParamsSchema = z.object({
 })
 
 export const GetTagQuestionsSchema = PaginatedSearchParamsSchema.extend({
-    tag: z.string().min(1, { message: "Tag ID is required." })
+    tagId: z.string().min(1, { message: "Tag ID is required." })
 })
 
 export const IncrementViewsSchema = z.object({
@@ -151,3 +152,7 @@ export const HasVotedSchema = CreateVoteSchema.pick({
 export const CollectionBaseSchema = z.object({
     questionId: z.string().min(1, { message: "Question ID is required." }),
 });
+
+export const GetUserSchema = z.object({
+     userId: z.string().min(1, { message: "User ID is required." }),
+})

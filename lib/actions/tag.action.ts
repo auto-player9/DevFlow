@@ -5,6 +5,7 @@ import handleError from "../handlers/error";
 import { FilterQuery } from "mongoose";
 import { Question, Tag } from "@/database";
 import { LinkBreak1Icon } from "@radix-ui/react-icons";
+import dbConnect from "../mongoose";
 
 export async function getTags(params: PaginatedSearchParams): Promise<ActionResponse<{ tags: Tag[]; isNext: boolean }>> {
     const validationResult = await action({ params, schema: PaginatedSearchParamsSchema });
@@ -96,19 +97,17 @@ export async function GetTagQuestions(params: GetTagQuestionsParams): Promise<Ac
         };
 
         if (query) {
-            filterQuery.title = [
-                { $regex: query, $options: "i" },
-            ]
+            filterQuery.title = { $regex: query, $options: "i" };
         }
 
         const totalQuestions = await Question.countDocuments(filterQuery);
 
         const questions = await Question.find(filterQuery)
-        .select('_id title views answers upvotes downvotes author createdAt')
-        .populate([
-            { path: 'author', select: "name image"},
-            { path: "tags", select: "name"}
-        ])
+            .select('_id title views answers upvotes downvotes author createdAt')
+            .populate([
+                { path: 'author', select: "name image" },
+                { path: "tags", select: "name" }
+            ])
             .skip(skip)
             .limit(limit)
 
@@ -124,6 +123,24 @@ export async function GetTagQuestions(params: GetTagQuestionsParams): Promise<Ac
             }
         };
 
+    } catch (error) {
+        return handleError(error, 'server') as ErrorResponse;
+    }
+
+}
+
+
+export async function getTopTags(): Promise<ActionResponse<Tag[]>> {
+    try {
+        await dbConnect();
+        const tags = await Tag.find()
+            .sort({ questions: -1 })
+            .limit(5);
+
+        return {
+            success: true,
+            data: JSON.parse(JSON.stringify(tags)),
+        }
     } catch (error) {
         return handleError(error, 'server') as ErrorResponse;
     }

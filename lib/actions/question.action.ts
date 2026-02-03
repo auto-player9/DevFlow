@@ -7,6 +7,7 @@ import handleError from "../handlers/error";
 import {
     AskQuestionSchema,
     EditQuestionSchema,
+    GetQuestionsByTagsSchema,
     GetQuestionSchema,
     IncrementViewsSchema,
     PaginatedSearchParamsSchema,
@@ -359,3 +360,4 @@ export async function getHotQuestions(): Promise<ActionResponse<Question[]>> {
         return handleError(error, 'server') as ErrorResponse;
     }
 }
+

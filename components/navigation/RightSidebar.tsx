@@ -4,10 +4,14 @@ import Image from "next/image";
 import TagCard from "@/components/cards/TagCard";
 import { getHotQuestions } from "@/lib/actions/question.action";
 import DataRenderer from "../DataRender";
+import { getTopTags } from "@/lib/actions/tag.action";
 
 async function RightSidebar() {
 
-    const { success, data: hotQuestions, errors } = await getHotQuestions();
+    const [
+        { success, data: hotQuestions, errors },
+        { success: tagSuccess, data: popularTags, errors: tagErrors }
+    ] = await Promise.all([getHotQuestions(), getTopTags()]);
 
     return (
         <>
@@ -39,15 +43,27 @@ async function RightSidebar() {
                         }}
                     />
                 </div>
-                {/* <div className="mt-16">
+                <div className="mt-16">
                     <h3 className="h3-bold text-dark200_light900">Popular Tags</h3>
-                    <div className="mt-7 flex flex-col gap-4">
-                        {popularTags.map(({ _id, name, questions }) => {
-                            return (<TagCard _id={_id} name={name} questions={questions} key={_id} showCount compact isButton={false} />)
-                        })
-                        }
-                    </div>
-                </div> */}
+                    <DataRenderer
+                        data={popularTags}
+                        empty={{
+                            title: "No tags found",
+                            message: "No tags have been asked yet."
+                        }}
+                        success={tagSuccess}
+                        errors={tagErrors}
+                        render={(popularTags) => (
+                            <div className="mt-7 flex flex-col gap-4">
+                                {
+                                    popularTags.map(({ _id, name, questions }) => {
+                                        return (<TagCard _id={_id} name={name} questions={questions} key={_id} showCount compact isButton={false} />)
+                                    })
+                                }
+                            </div>
+                        )}
+                    />
+                </div>
             </section>
         </>
     )

@@ -64,7 +64,7 @@ export default function DataRenderer<T,>({
             }}
             title={errors?.message || DEFAULT_ERROR.title}
             message={errors?.details ? JSON.stringify(errors.details, null, 2) : DEFAULT_ERROR.message}
-            button={DEFAULT_ERROR.button}
+            button={empty.button}
         />
     }
 

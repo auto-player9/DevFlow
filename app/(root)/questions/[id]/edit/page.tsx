@@ -14,7 +14,8 @@ export default async function EditQuestion({ params }: RouteParams) {
     
     const { data: question, success } = await getQuestion({ questionId: id});
     if(!success) return notFound();
-    if (question?.author !== session?.user?.id) return(ROUTES.QUESTION(id))
+    console.log(question?.author)
+    if (question?.author._id !== session?.user?.id) return(ROUTES.QUESTION(id))
     return (
         <>
             <div className="mt-9">

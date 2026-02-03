@@ -1,6 +1,7 @@
 interface Tag {
     _id: string,
     name: string,
+    questions?: number
 }
 
 interface Author {
@@ -58,7 +59,7 @@ interface Answer {
     upvotes: number;
     downvotes: number;
     createdAt: Date;
-} 
+}
 
 interface User {
     _id: string;
@@ -67,7 +68,7 @@ interface User {
     email: string;
     image?: string;
     bio?: string;
-    location?: string;  
+    location?: string;
     portfolio?: string
     reputation?: number;
 }
@@ -77,3 +78,4 @@ interface Collection {
     author: string | Author;
     question: Question;
 }
+
