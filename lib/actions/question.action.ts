@@ -7,17 +7,15 @@ import handleError from "../handlers/error";
 import {
     AskQuestionSchema,
     EditQuestionSchema,
-    GetQuestionsByTagsSchema,
     GetQuestionSchema,
     IncrementViewsSchema,
     PaginatedSearchParamsSchema,
 } from "../validations";
-import Tag, { ITagDoc } from "@/database/tag.model";
+import Tag from "@/database/tag.model";
 import TagQuestion from "@/database/tag-question.model";
 import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
-import { Db } from "mongodb";
 import dbConnect from "../mongoose";
 
 
