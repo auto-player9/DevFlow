@@ -1,4 +1,4 @@
-![DevFlow Logo](/public/assets/images/logo.png)
+![DevFlow Logo](/public/images/logo.png)
 
 ### A full-stack web platform for developers to ask, post, and answer programming questions, inspired by Stack Overflow.
 
@@ -70,10 +70,10 @@
 
 ## 📸 Screenshots
 
-![Screenshot 1](/public/assets/images/devflow.png)
-![Screenshot 2](/public/assets/images/devflow2.png)
+![Screenshot 1](/public/images/devflow.png)
+![Screenshot 2](/public/images/devflow2.png)
 
-Project Link: [Click me](https://devflow-lzheng3s-projects.vercel.app/)
+Project Link: [Click me](https://dev-flow-4o5y.vercel.app/)
 
 ---
 
