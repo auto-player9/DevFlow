@@ -19,6 +19,7 @@ import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
 import dbConnect from "../mongoose";
 import { Answer } from "@/database";
+import { cache } from "react";
 
 
 
@@ -195,40 +196,42 @@ export async function editQuestion(
     }
 }
 
-export async function getQuestion(
-    params: GetQuestionParams
-): Promise<ActionResponse<Question>> {
-    const validationResult = await action({
-        params,
-        schema: GetQuestionSchema,
-        authorize: true,
-    });
+export const getQuestion = cache(
+    async function getQuestion(
+        params: GetQuestionParams
+    ): Promise<ActionResponse<Question>> {
+        const validationResult = await action({
+            params,
+            schema: GetQuestionSchema,
+            authorize: true,
+        });
 
-    if (validationResult instanceof Error) {
-        return handleError(validationResult, "server") as ErrorResponse;
-    }
-
-    const { questionId } = validationResult.params!;
-
-    try {
-        const question = await Question.findById(questionId)
-            .populate("tags")
-            .populate("author", "_id name image")
-            ;
-
-        if (!question) {
-            throw new Error("Question not found");
+        if (validationResult instanceof Error) {
+            return handleError(validationResult, "server") as ErrorResponse;
         }
 
-        return {
-            status: 200,
-            success: true,
-            data: JSON.parse(JSON.stringify(question)),
-        };
-    } catch (error) {
-        return handleError(error, "server") as ErrorResponse;
+        const { questionId } = validationResult.params!;
+
+        try {
+            const question = await Question.findById(questionId)
+                .populate("tags")
+                .populate("author", "_id name image")
+                ;
+
+            if (!question) {
+                throw new Error("Question not found");
+            }
+
+            return {
+                status: 200,
+                success: true,
+                data: JSON.parse(JSON.stringify(question)),
+            };
+        } catch (error) {
+            return handleError(error, "server") as ErrorResponse;
+        }
     }
-}
+)
 
 export async function getQuestions(
     params: PaginatedSearchParams
