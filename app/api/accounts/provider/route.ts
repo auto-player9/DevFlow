@@ -1,5 +1,4 @@
 import handleError from "@/lib/handlers/error";
-import {APIErrorResponse} from "@/types/global";
 import {ValidationError} from "@/lib/http-errors";
 import {NotFoundError} from "@humanfs/core";
 import {NextResponse} from "next/server";
