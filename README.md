@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+DevFlow Logo
+A full-stack web platform for developers to ask, post, and answer programming questions, inspired by Stack Overflow.
+🚀 Features
+User Authentication & Authorization
+Powered by Clerk for secure login and account management.
 
-## Getting Started
+AI-Powered Answer Suggestions
+Get automated answers to your programming questions using AI.
 
-First, run the development server:
+Voting System
+Rank questions and answers based on community feedback.
 
-```bash
+Global & Local Search
+Seamlessly search for questions, answers, and user profiles across the platform.
+
+Efficient Data Management
+Built using MongoDB for fast and scalable storage of questions, answers, and user information.
+
+Performance & SEO Optimized
+Thanks to Next.js server-side rendering, DevFlow offers enhanced performance and SEO.
+
+🛠️ Tech Stack
+Frontend: React, Next.js
+UI: Tailwind CSS, shadcn
+Authentication: Clerk
+Database: MongoDB
+Deployment: Vercel
+⚙️ Installation & Setup
+Clone the repository:
+
+git clone https://github.com/lzheng3/devflow.git
+cd devflow
+Install the dependencies:
+
+npm install
+Set up environment variables: Create a .env.local file in the root of the project and add the following variables:
+
+CLERK_API_KEY=<your-clerk-api-key>
+MONGODB_URI=<your-mongodb-uri>
+NEXT_PUBLIC_AI_API_KEY=<your-ai-api-key>
+Run the development server:
+
 npm run dev
-# or
+ # or
 yarn dev
-# or
+ # or
 pnpm dev
-# or
+ # or
 bun dev
-```
+Open http://localhost:3000 to view it in your browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+📸 Screenshots
+Screenshot 1 Screenshot 2
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Project Link: Click me
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project is inspired by the need for a better way to ask and answer programming questions with the power of AI.
