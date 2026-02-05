@@ -44,6 +44,11 @@ export const mobileSidebarLinks = [
         label: "Home",
     },
     {
+        imgURL: "/icons/users.svg",
+        route: "/community",
+        label: "Community",
+    },
+    {
         imgURL: "/icons/star.svg",
         route: "/collection",
         label: "Collections",
@@ -54,21 +59,16 @@ export const mobileSidebarLinks = [
         label: "Tags",
     },
     {
-        imgURL: "/icons/users.svg",
-        route: "/community",
-        label: "Communities",
+        imgURL: "/icons/user.svg",
+        route: "/profile",
+        label: "Profile",
     },
     {
         imgURL: "/icons/question.svg",
         route: "/ask-question",
-        label: "Ask a Question",
+        label: "Ask a question",
     },
-    {
-        imgURL: "/icons/users.svg",
-        route: "/recommended-questions",
-        label: "Recommended Qs",
-    },
-];
+]
 
 export const BADGE_CRITERIA = {
     QUESTION_COUNT: {
