@@ -68,11 +68,6 @@
 
 5. Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-## 📸 Screenshots
-
-![Screenshot 1](/public/images/devflow.png)
-![Screenshot 2](/public/images/devflow2.png)
-
 Project Link: [Click me](https://dev-flow-4o5y.vercel.app/)
 
 ---
