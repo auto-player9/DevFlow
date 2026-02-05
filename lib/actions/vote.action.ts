@@ -22,6 +22,7 @@ export async function updateVoteCount(params: UpdateVoteCountParams, session?: C
 
     const { targetId, targetType, voteType, change } = validationResult.params!
 
+
     console.log('Updating vote count:', { targetId, targetType, voteType, change });
 
     const Model = targetType === 'question' ? Question : Answer;
@@ -80,11 +81,11 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
                 await Vote.deleteOne({
                     _id: existingVote._id
                 }).session(session)
-                await updateVoteCount({ targetId, targetType, voteType, change: -1 }, { session })
+                await updateVoteCount({ targetId, targetType, voteType, change: -1 }, session)
             } else {
-                await updateVoteCount({ targetId, targetType, voteType: existingVote.voteType, change: -1 }, { session })
+                await updateVoteCount({ targetId, targetType, voteType: existingVote.voteType, change: -1 }, session )
                 await Vote.findByIdAndUpdate(existingVote._id, { voteType }, { new: true, session })
-                await updateVoteCount({ targetId, targetType, voteType, change: 1 }, { session })
+                await updateVoteCount({ targetId, targetType, voteType, change: 1 }, session )
             }
         } else {
             await Vote.create([{
@@ -93,7 +94,7 @@ export async function createVote(params: CreateVoteParams): Promise<ActionRespon
                 type: targetType,
                 voteType,
             }], { session })
-            await updateVoteCount({ targetId, targetType, voteType, change: 1 }, { session })
+            await updateVoteCount({ targetId, targetType, voteType, change: 1 }, session )
         }
 
         await session.commitTransaction();

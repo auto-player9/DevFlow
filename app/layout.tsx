@@ -1,11 +1,10 @@
-import type {Metadata} from "next";
+import type { Metadata } from "next";
 import "./globals.css";
 import localFont from "next/font/local";
-import {ThemeProvider} from "next-themes";
-import {Toaster} from "@/components/ui/sonner";
+import { ThemeProvider } from "next-themes";
+import { Toaster } from "@/components/ui/sonner";
 import React from "react";
-import {SessionProvider} from "next-auth/react";
-import {ClerkProvider} from "@clerk/nextjs";
+import { SessionProvider } from "next-auth/react";
 
 const Inter = localFont({
     src: "./fonts/InterVF.ttf",
@@ -30,18 +29,17 @@ export const metadata: Metadata = {
 
 
 export default function RootLayout({
-                                       children,
-                                   }: Readonly<{
+    children,
+}: Readonly<{
     children: React.ReactNode;
 }>) {
 
 
     return (
-        <ClerkProvider>
-            <html lang="en" suppressHydrationWarning={true}>
+        <html lang="en" suppressHydrationWarning={true}>
             <head>
                 <link rel="stylesheet" type='text/css'
-                      href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"/>
+                    href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css" />
 
             </head>
             <SessionProvider>
@@ -49,15 +47,14 @@ export default function RootLayout({
                 <body
                     className={`${Inter.className} ${SpaceGrotesk.variable} antialiased`}
                 >
-                <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
-                               disableTransitionOnChange={true}>
-                    {children}
-                </ThemeProvider>
-                <Toaster/>
+                    <ThemeProvider attribute={"class"} defaultTheme={"system"} enableSystem={true}
+                        disableTransitionOnChange={true}>
+                        {children}
+                    </ThemeProvider>
+                    <Toaster />
                 </body>
 
             </SessionProvider>
-            </html>
-        </ClerkProvider>
+        </html>
     );
 }

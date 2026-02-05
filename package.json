@@ -10,8 +10,6 @@
     "tailwind-config": "tailwindcss init"
   },
   "dependencies": {
-    "@clerk/clerk-react": "^5.58.0",
-    "@clerk/nextjs": "^6.36.1",
     "@eslint/eslintrc": "^3.3.3",
     "@hookform/resolvers": "^5.2.2",
     "@mdxeditor/editor": "^3.52.1",
