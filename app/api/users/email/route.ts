@@ -1,5 +1,4 @@
 import handleError from "@/lib/handlers/error";
-import {APIErrorResponse} from "@/types/global";
 import {UserSchema} from "@/lib/validations";
 import {ValidationError} from "@/lib/http-errors";
 import User from "@/database/user.model";

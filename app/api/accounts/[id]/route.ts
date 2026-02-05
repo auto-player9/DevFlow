@@ -1,6 +1,5 @@
 import {NotFoundError} from "@humanfs/core";
 import handleError from "@/lib/handlers/error";
-import {APIErrorResponse} from "@/types/global";
 import dbConnect from "@/lib/mongoose";
 import {NextResponse} from "next/server";
 import {AccountSchema} from "@/lib/validations";
