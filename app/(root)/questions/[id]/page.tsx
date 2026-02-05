@@ -60,7 +60,7 @@ export default async function QuestionDetails({ params, searchParams }: RoutePar
                 <div className="flex w-full flex-col-reverse justify-between">
                     <div className="flex items-center justify-start gap-1">
                         <UserAvatar
-                            id={author._id} name={author.name} className="size-[22px]" fallbackClassName="text-[10px]" />
+                            id={author._id} name={author.name} imageUrl={author.image} className="size-[22px]" fallbackClassName="text-[10px]" />
                         <Link href={ROUTES.PROFILE(author._id)}>
                             <p className="paragraph-semibold text-dark300_light700">
                                 {author.name}

@@ -3,9 +3,11 @@ import Link from "next/link";
 import ROUTES from "@/constants/routes";
 import TagCard from "@/components/cards/TagCard";
 import Matric from "../Matric";
+import EditDeleteAction from "../user/EditDeleteAction";
 
 interface Props {
     question: Question;
+    showActionBtns?: boolean
 }
 
 export default function QuestionCard({
@@ -19,19 +21,21 @@ export default function QuestionCard({
         upvotes,
         answers,
         views
-    }
+    },
+    showActionBtns = false,
 }: Props) {
     return (
         <>
             <div className="card-wrapper rounded-[10px] p-9 sm:px-11">
                 <div className="flex flex-column-reverse items-start justify-between gap-5 sm:flex-row">
-                    <div>
+                    <div className="flex-1">
                         <span className="sbutle-regular text-dark400_light700 line-clamp-1 felx sm:hidden">{getTimeStamp(createdAt.toString())}</span>
                         <Link href={ROUTES.QUESTION(_id)}>
                             <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
                                 {title}
                             </h3>
                         </Link>
+                        {showActionBtns && <EditDeleteAction type="Question" itemId={_id}/>}
                     </div>
                 </div>
                 <div className="mt-3.5 flex w-full flex-wrap gap-2">

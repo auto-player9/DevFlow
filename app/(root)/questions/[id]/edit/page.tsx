@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import QuestionForm from "@/components/forms/QuestionForm";
 import ROUTES from "@/constants/routes";
 import { getQuestion } from "@/lib/actions/question.action";
+import { Router } from "lucide-react";
 import { notFound, redirect } from "next/navigation";
 
 export default async function EditQuestion({ params }: RouteParams) {
@@ -15,7 +16,7 @@ export default async function EditQuestion({ params }: RouteParams) {
     const { data: question, success } = await getQuestion({ questionId: id});
     if(!success) return notFound();
     console.log(question?.author)
-    if (question?.author._id !== session?.user?.id) return(ROUTES.QUESTION(id))
+    if (question?.author._id !== session?.user?.id) return redirect(ROUTES.QUESTION(id))
     return (
         <>
             <div className="mt-9">
