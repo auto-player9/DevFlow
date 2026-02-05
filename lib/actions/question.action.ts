@@ -1,11 +1,12 @@
 "use server";
 
-import mongoose, { FilterQuery } from "mongoose";
+import mongoose from "mongoose";
 import Question from "@/database/question.model";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
 import {
     AskQuestionSchema,
+    DeleteQuestionSchema,
     EditQuestionSchema,
     GetQuestionSchema,
     IncrementViewsSchema,
@@ -17,6 +18,7 @@ import User from "@/database/user.model";
 import { revalidatePath } from "next/cache";
 import ROUTES from "@/constants/routes";
 import dbConnect from "../mongoose";
+import { Answer } from "@/database";
 
 
 
@@ -245,7 +247,7 @@ export async function getQuestions(
     const skip = (Number(page) - 1) * pageSize;
     const limit = Number(pageSize);
 
-    const filterQuery: FilterQuery = {};
+    const filterQuery: mongoose._QueryFilter<typeof Question> = {};
 
     if (filter === "recommended")
         return {
@@ -359,3 +361,39 @@ export async function getHotQuestions(): Promise<ActionResponse<Question[]>> {
     }
 }
 
+
+export async function deleteQuestion(
+    params: DeleteQuestionParams
+): Promise<ActionResponse<{ hasDeleted: boolean }>> {
+    const validationResult = await action({
+        params,
+        schema: DeleteQuestionSchema,
+        authorize: true,
+    });
+
+    if (validationResult instanceof Error) {
+        return handleError(validationResult, "server") as ErrorResponse;
+    }
+
+    const { questionId } = validationResult.params!;
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const answerResult = await Answer.deleteMany({ question: questionId }, { session });
+        const questionResult = await Question.deleteOne({ _id: questionId }, { session });
+
+        await session.commitTransaction();
+        return {
+            status: 200,
+            success: true,
+            data: { hasDeleted: questionResult.deletedCount > 0 && answerResult.deletedCount > 0 }
+        };
+    } catch (error) {
+        session.abortTransaction();
+        return handleError(error, "server") as ErrorResponse;
+    } finally {
+        session.endSession()
+    }
+}

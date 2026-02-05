@@ -2,7 +2,7 @@
 
 import Answer, { IAnswer } from "@/database/answer.model";
 import action from "../handlers/action";
-import { AnswerServerSchema, GetAnswersSchema } from "../validations";
+import { AnswerServerSchema, DeleteAnswerSchema, GetAnswersSchema } from "../validations";
 import handleError from "../handlers/error";
 import mongoose from "mongoose";
 import { error } from "console";
@@ -128,4 +128,33 @@ export async function getAnswers(params: GetAnswerParams): Promise<ActionRespons
         return handleError(error, 'server') as ErrorResponse;
     }
 
+}
+
+
+export async function deleteAnswer(
+    params: DeleteAnswerParams
+): Promise<ActionResponse<{ hasDeleted: boolean }>> {
+    const validationResult = await action({
+        params,
+        schema: DeleteAnswerSchema,
+        authorize: true,
+    });
+
+    if (validationResult instanceof Error) {
+        return handleError(validationResult, "server") as ErrorResponse;
+    }
+
+    const { answerId } = validationResult.params!;
+
+    try {
+        const result = await Answer.deleteOne({ _id: answerId });
+
+        return {
+            status: 200,
+            success: true,
+            data: { hasDeleted: result.acknowledged! },
+        };
+    } catch (error) {
+        return handleError(error, "server") as ErrorResponse;
+    }
 }

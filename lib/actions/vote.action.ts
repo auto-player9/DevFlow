@@ -3,7 +3,6 @@
 import mongoose, { ClientSession } from "mongoose";
 import action from "../handlers/action";
 import handleError from "../handlers/error";
-import { FilterQuery } from "mongoose";
 import { CreateVoteSchema, UpdateVoteCountSchema, HasVotedSchema } from "../validations";
 import { Answer, Question, Vote } from "@/database";
 import { revalidatePath } from "next/cache";

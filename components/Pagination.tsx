@@ -33,7 +33,7 @@ export default function Pagination({ page = 1, isNext, containerClasses }: Props
         <div className={cn("flex w-full items-center justify-center gap-2 mt-5", containerClasses)}>
             {Number(page) > 1 && (
                 <Button
-                    className="bg-transparent hover:bg-accent light-border-2 flex min-h-[36px] items-center  justify-center gap-2 border"
+                    className="!bg-transparent hover:bg-accent light-border-2 flex min-h-[36px] items-center  justify-center gap-2 border"
                     onClick={() => handleNavigation('prev')}
                 >
                     <p className="body-medium text-dark200_light800">Prev</p>
@@ -46,7 +46,7 @@ export default function Pagination({ page = 1, isNext, containerClasses }: Props
 
             {(isNext && (
                 <Button
-                    className="bg-transparent hover:bg-accent light-border-2 flex min-h-[36px] items-center  justify-center gap-2 border"
+                    className="!bg-transparent hover:bg-accent light-border-2 flex min-h-[36px] items-center  justify-center gap-2 border"
                     onClick={() => handleNavigation('next')}
                 >
                     <p className="body-medium text-dark200_light800">Next</p>

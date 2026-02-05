@@ -2,10 +2,10 @@ import { boolean } from "zod";
 import action from "../handlers/action";
 import { GetQuestionSchema, GetTagQuestionsSchema, PaginatedSearchParamsSchema } from "../validations";
 import handleError from "../handlers/error";
-import { FilterQuery } from "mongoose";
 import { Question, Tag } from "@/database";
 import { LinkBreak1Icon } from "@radix-ui/react-icons";
 import dbConnect from "../mongoose";
+import mongoose from "mongoose";
 
 export async function getTags(params: PaginatedSearchParams): Promise<ActionResponse<{ tags: Tag[]; isNext: boolean }>> {
     const validationResult = await action({ params, schema: PaginatedSearchParamsSchema });
@@ -19,7 +19,7 @@ export async function getTags(params: PaginatedSearchParams): Promise<ActionResp
     const skip = (Number(page) - 1) * pageSize;
     const limit = Number(pageSize);
 
-    const filterQuery: FilterQuery<typeof Tag> = {};
+    const filterQuery: mongoose._QueryFilter<typeof Tag> = {};
 
     if (query) {
         filterQuery.$or = [
@@ -92,7 +92,7 @@ export async function GetTagQuestions(params: GetTagQuestionsParams): Promise<Ac
         if (!tag) throw new Error("Tag not found");
 
 
-        const filterQuery: FilterQuery<typeof Question> = {
+        const filterQuery: mongoose._QueryFilter<typeof Question> = {
             tags: { $in: [tagId] }
         };
 

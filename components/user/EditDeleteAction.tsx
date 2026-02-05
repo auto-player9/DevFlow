@@ -16,6 +16,8 @@ import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import ROUTES from "@/constants/routes";
+import { deleteQuestion } from "@/lib/actions/question.action";
+import { deleteAnswer } from "@/lib/actions/answer.action";
 
 interface Props {
     type: string,
@@ -28,14 +30,31 @@ export default function EditDeleteAction({ type, itemId }: Props) {
         router.push(ROUTES.QUESTION(itemId) + "/edit")
     }
 
-    const handelDelete = async () => {
+    const handelDelete = async (itemId: string) => {
         if (type === "Question") {
-            // Call API to delete question
+            const { success, data, errors } = await deleteQuestion({ questionId: itemId })
 
-            toast.success('Question deleted', { description: "Your question has been deleted successfully." })
+            if (success) {
+                if (data?.hasDeleted)
+                    toast.success('Question deleted', { description: "Your question has been deleted successfully." })
+                else {
+                    toast.error('Faild to delete question', { description: "An error has occurred" })
+                }
+            } else {
+                toast.error('Faild to delete question', { description: errors?.message || "An error has occurred" })
+            }
         } else if (type === "Answer") {
-            // Call API to delete answer
-            toast.success('Answer deleted', { description: "Your answer has been deleted successfully." })
+            const { success, data, errors } = await deleteAnswer({ answerId: itemId })
+
+            if (success) {
+                if (data?.hasDeleted)
+                    toast.success('Answer deleted', { description: "Your answer has been deleted successfully." })
+                else {
+                    toast.error('Faild to delete answer', { description: "An error has occurred" })
+                }
+            } else {
+                toast.error('Faild to delete answer', { description: errors?.message || "An error has occurred" })
+            }
         }
     }
 
@@ -60,7 +79,7 @@ export default function EditDeleteAction({ type, itemId }: Props) {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel className="btn">Cancel</AlertDialogCancel>
-                        <AlertDialogAction className="!border-primary-100 !bg-primary-500 !text-light-800" onClick={handelDelete}>
+                        <AlertDialogAction className="!border-primary-100 !bg-primary-500 !text-light-800" onClick={() => handelDelete(itemId)}>
                             Continue
                         </AlertDialogAction>
                     </AlertDialogFooter>

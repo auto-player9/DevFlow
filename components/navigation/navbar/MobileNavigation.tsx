@@ -46,11 +46,11 @@ const MobileNavigation = async () => {
                 <div
                     className="no-scrollbar flex h-[calc(100vh-80px)] flex-col justify-between overflow-y-auto">
                     <SheetClose asChild>
-                        <section className="flex h-full flex-col gap-6 pt-16">
+                        <section className="flex h-full flex-col gap-3 pt-16">
                             <NavLinks isMobileNav userId={userId} />
                         </section>
                     </SheetClose>
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 pb-24">
                         {
                             userId ?
                                 (
@@ -62,7 +62,7 @@ const MobileNavigation = async () => {
                                             }}
                                             className="w-full"
                                         >
-                                            <Button className="base-medium light-border-2 bg-transparent hover:bg-transparent text-dark400_light900 min-h-[41px] w-full rounded-lg px-4 py-3 cursor-pointer">
+                                            <Button className="base-medium light-border-2 !bg-transparent hover:bg-transparent text-dark400_light900 min-h-[41px] w-full rounded-lg px-4 pt-3 pb-3 p cursor-pointer">
                                                 <LogOut className='h-12 w-12' />
                                                 Log Out
                                             </Button>

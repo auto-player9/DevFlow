@@ -21,11 +21,6 @@ export const sidebarLinks = [
         label: "Collections",
     },
     {
-        imgURL: "/icons/suitcase.svg",
-        route: "/jobs",
-        label: "Find Jobs",
-    },
-    {
         imgURL: "/icons/tag.svg",
         route: "/tags",
         label: "Tags",
@@ -52,11 +47,6 @@ export const mobileSidebarLinks = [
         imgURL: "/icons/star.svg",
         route: "/collection",
         label: "Collections",
-    },
-    {
-        imgURL: "/icons/suitcase.svg",
-        route: "/jobs",
-        label: "Find Jobs",
     },
     {
         imgURL: "/icons/tag.svg",

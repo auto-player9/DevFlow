@@ -3,7 +3,7 @@
 import User from "@/database/user.model";
 import action from "../handlers/action";
 import { GetUserAnswersSchema, GetUserQuestionsSchema, GetUserSchema, GetUserTagsSchema, PaginatedSearchParamsSchema } from "../validations";
-import { FilterQuery, PipelineStage, Types } from "mongoose";
+import mongoose, { PipelineStage, Types } from "mongoose";
 import handleError from "../handlers/error";
 import { Answer, Question } from "@/database";
 import { userAgent } from "next/server";
@@ -22,7 +22,7 @@ export async function getUsers(params: PaginatedSearchParams)
     const { page = 1, pageSize = 10, query = '', filter } = validationResult.params!;
     const skip = (Number(page) - 1) * pageSize;
     const limit = pageSize;
-    const fielterQuery: FilterQuery<typeof User> = {};
+    const fielterQuery: mongoose._QueryFilter<typeof User> = {};
 
     if (query) {
         fielterQuery.$or = [
