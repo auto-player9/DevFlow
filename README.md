@@ -6,7 +6,7 @@
 
 - **User Authentication & Authorization**  
   Powered by **Clerk** for secure login and account management.
-
+ 
 - **AI-Powered Answer Suggestions**  
   Get automated answers to your programming questions using AI.
 
