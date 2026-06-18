@@ -27,26 +27,29 @@ if (!cached) {
 const dbConnect = async () => {
     if (cached.conn) {
         logger.info('Using existing mongodb connection');
-        return cached.conn
+        return cached.conn;
     }
 
-    if(!cached.promise) {
-        cached.promise = mongoose.connect(MONGODB_URI,{dbName: "devflow"})
+    if (!cached.promise) {
+        cached.promise = mongoose.connect(MONGODB_URI, { dbName: "devflow" })
             .then((result) => {
                 logger.info('Connected to MongoDB');
                 return result;
             })
             .catch((error) => {
                 logger.error("Error Connecting To MongoDB", error);
-                throw error
-            })
-        cached.conn = await cached.promise;
-        return cached.conn;
+                cached.promise = null; 
+                throw error;
+            });
     }
 
-    cached.conn = await cached.promise;
+    try {
+        cached.conn = await cached.promise;
+    } catch (e) {
+        cached.promise = null; 
+        throw e;
+    }
+
     return cached.conn;
-
 }
-
 export default dbConnect;
